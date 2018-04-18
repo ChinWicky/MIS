@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>Insert title here</title>
+<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+<script type="text/javascript">
+    //修改品种名
+    function addType() {
+        var form = document.forms[0];
+        form.action = "http://localhost:8080/type/add";
+        form.method = "post";
+        form.submit();
+    }
+</script>
+</head>
+<body>
+    <div class="container">
+    <div class="row clearfix">
+        <div class="col-md-3 column">
+ 
+			
+		<form>  
+		   
+           <label>typeName</label>  <input type="text" name="typename" />  
+              <input type="button" value="添加" onclick="return addType()"/>  
+        </form>  
+
+            
+        </div>
+    </div>
+</div>
+</body>
+</html>
