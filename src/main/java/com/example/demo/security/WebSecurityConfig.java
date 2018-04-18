@@ -30,6 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 //.antMatchers("/resources/**", "/signup", "/about").permitAll()
+                .antMatchers("/login","/lib/bootstrap/css/**","/images/*","/stylesheets/*","/lib/font-awesome/css/**").permitAll()
                 .antMatchers("/type/delete").hasRole("ADMIN")
                 .antMatchers("/type/toAdd").hasRole("ADMIN")
                 .antMatchers("/sevProject/delete").hasRole("ADMIN")

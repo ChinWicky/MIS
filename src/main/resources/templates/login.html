@@ -1,54 +1,134 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <!--<meta charset="UTF-8"/>-->
-    <!--<title>登录</title>-->
-    <!--<link rel="stylesheet" th:href="@{css/bootstrap.min.css}"/>-->
-    <!--<link rel="stylesheet" th:href="@{css/signin.css}"/>-->
-    <!--<style type="text/css">-->
-        <!--body {-->
-            <!--padding-top: 50px;-->
-        <!--}-->
+<html  xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" >
 
-        <!--.starter-template {-->
-            <!--padding: 40px 15px;-->
-            <!--text-align: center;-->
-        <!--}-->
-    <!--</style>-->
+<head>
+    <meta charset="utf-8">
+    <title>Twenty Four</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link href="../static/lib/bootstrap/css/bootstrap.css"
+          th:href="@{/lib/bootstrap/css/bootstrap.css}"
+
+          rel="stylesheet" media="screen" />
+    <link href="../static/lib/bootstrap/css/bootstrap-responsive.css"
+          th:href="@{/lib/bootstrap/css/bootstrap-responsive.css}"
+          rel="stylesheet" media="screen" />
+    <link href="../static/stylesheets/theme.css"
+          th:href="@{/stylesheets/theme.css}"
+          rel="stylesheet" media="screen" />
+    <link href="../static/lib/font-awesome/css/font-awesome.css"
+          th:href="@{/lib/font-awesome/css/font-awesome.css}"
+          rel="stylesheet" media="screen" />
+    <script href="../static/lib/jquery-1.8.1.min.js"
+            th:href="@{/lib/jquery-1.8.1.min.js}"></script>
+
+
+    <style type="text/css">
+        #line-chart {
+            height:300px;
+            width:800px;
+            margin: 0px auto;
+            margin-top: 1em;
+        }
+        .brand { font-family: georgia, serif; }
+        .brand .first {
+            color: #ccc;
+            font-style: italic;
+        }
+        .brand .second {
+            color: #fff;
+            font-weight: bold;
+        }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <!--<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>-->
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="../assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
 </head>
+
+<!--[if lt IE 7 ]> <body class="ie ie6"> <![endif]-->
+<!--[if IE 7 ]> <body class="ie ie7"> <![endif]-->
+<!--[if IE 8 ]> <body class="ie ie8"> <![endif]-->
+<!--[if IE 9 ]> <body class="ie ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
 <body>
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">Spring Security演示</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li><a th:href="@{/}">首页</a></li>
-                <li><a th:href="@{http://www.baidu.com}">百度</a></li>
+<!--<![endif]-->
+
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <ul class="nav pull-right">
+
             </ul>
+            <a class="brand" href="type_list.html"><span class="first">My</span> <span class="second">Beauty</span></a>
         </div>
-    </div>
-</nav>
-<div class="container">
-    <div class="starter-template">
-        <p th:if="${param.logout}" class="bg-warning">已注销</p>
-        <p th:if="${param.error}" class="bg-danger">有错误，请重试</p>
-        <h2>使用账号密码登录</h2>
-        <form class="form-signin" role="form" name="form" th:action="@{/login}" action="/login" method="post">
-            <div class="form-group">
-                <label for="username">账号</label>
-                <input type="text" class="form-control" name="username" value="" placeholder="账号"/>
-            </div>
-            <div class="form-group">
-                <label for="password">密码</label>
-                <input type="password" class="form-control" name="password" placeholder="密码"/>
-            </div>
-            <input type="submit" id="login" value="Login" class="btn btn-primary"/>
-        </form>
     </div>
 </div>
 
 
+<div class="container-fluid">
+
+    <div class="row-fluid">
+        <div class="dialog span4">
+            <div class="block">
+                <div class="block-heading">登录</div>
+                <div class="block-body">
+                    <form class="form-signin" role="form" name="form" th:action="@{/login}" action="/login" method="post">
+                        <label for="username">账户</label>
+                        <input type="text" class="span12" name="username" value="" placeholder="账号"/>
+                        <label for="password">密码</label>
+                        <input type="password" class="span12" name="password" placeholder="密码"/>
+                        <input type="submit" id="login" value="Login" class="btn btn-primary"/>
+                        <!--<input type="submit" id="login" value="Login" class="btn btn-primary"/>-->
+
+                        <label class="remember-me"><input type="checkbox"> 记住我</label>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+            <!--<p class="pull-right" style=""><a href="#" target="blank">Theme by Portnine</a></p>-->
+
+            <p><a href="reset-password.html">忘记密码?</a></p>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="lib/bootstrap/js/bootstrap.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
 </body>
 </html>
+
+
