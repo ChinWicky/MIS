@@ -13,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author Wicky
- * @since 2018-04-18
+ * @since 2018-03-26
  */
 @TableName("sev_project")
 public class SevProject extends Model<SevProject> {

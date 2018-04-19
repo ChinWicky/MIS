@@ -12,7 +12,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author Wicky
- * @since 2018-04-18
+ * @since 2018-04-17
  */
 @TableName("sys_user")
 public class SysUser extends Model<SysUser> {

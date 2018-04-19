@@ -30,20 +30,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 //.antMatchers("/resources/**", "/signup", "/about").permitAll()
-                .antMatchers("/login","/lib/bootstrap/css/**","/images/*","/stylesheets/*","/lib/font-awesome/css/**").permitAll()
+
                 .antMatchers("/type/delete").hasRole("ADMIN")
-                .antMatchers("/type/toAdd").hasRole("ADMIN")
+                .antMatchers("/type/add").hasRole("ADMIN")
                 .antMatchers("/sevProject/delete").hasRole("ADMIN")
-                .antMatchers("/sevProject/toAdd").hasRole("ADMIN")
+                .antMatchers("/sevProject/add").hasRole("ADMIN")
+                .antMatchers("/type/edit").hasRole("ADMIN")
+                .antMatchers("/sevProject/edit").hasRole("ADMIN")
                 //.antMatchers("/db/**").access("hasRole('ROLE_ADMIN')")
+                .antMatchers("/login","/javascripts/**","/images/**","/lib/**","/stylesheets/**","/session/invalid")
+                .permitAll()
                 .anyRequest().authenticated()
-                .and()
-                // ...
-                .formLogin().loginPage("/login").failureUrl("/login?error").permitAll()
+                .and().formLogin().loginPage("/login")
+                //设置默认登录成功跳转页面
+                .defaultSuccessUrl("/index").failureUrl("/login?error").permitAll()
                 .and()
                 .logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
+                .logoutSuccessUrl("/login?logout")
                 .permitAll();
 
         http.csrf().disable();

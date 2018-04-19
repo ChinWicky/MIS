@@ -57,13 +57,22 @@ public class SevProjectController {
         sevProject.setPriPrice(priPrice);
         sevProject.setTypeid(typeid);
 
-
+        //返回列表
+        Map map=new HashMap();
+        java.util.List<SevProject> sev_projects = sevProjectService.selectByMap(map);
+        model.addAttribute("sev_projects",sev_projects);
+        java.util.List<Type> types = typeService.selectByMap(map);
+        model.addAttribute("types",types);
+        //显示用户名
+        HttpServletRequest request1= ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+        SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
+        model.addAttribute("user",user1);
         System.out.print("stringname..."+sevProject.getPrice());
         //添加
         this.sevProjectService.insert(sevProject);
         //返回列表
 
-        return "sevproject_list";
+        return "pro/sevproject_list";
 
     }
 
@@ -78,7 +87,7 @@ public class SevProjectController {
         SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
         model.addAttribute("user",user1);
 
-        return "add_pro";
+        return "pro/add_pro";
 
     }
 
@@ -100,7 +109,7 @@ public class SevProjectController {
         SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
         model.addAttribute("user",user1);
 
-        return "sevproject_list";
+        return "pro/sevproject_list";
     }
 
     @RequestMapping("/SelectByType")
@@ -118,7 +127,7 @@ public class SevProjectController {
         SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
         model.addAttribute("user",user1);
 
-        return "sevproject_list";
+        return "pro/sevproject_list";
     }
 
 
@@ -136,7 +145,7 @@ public class SevProjectController {
         HttpServletRequest request1= ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
         SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
         model.addAttribute("user",user1);
-        return "sevproject_list";
+        return "pro/sevproject_list";
     }
 
 
@@ -178,7 +187,7 @@ public class SevProjectController {
         HttpServletRequest request1= ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
         SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
         model.addAttribute("user",user1);
-        return "sevproject_list";
+        return "pro/sevproject_list";
     }
 
     //修改种类名称
@@ -198,7 +207,7 @@ public class SevProjectController {
         HttpServletRequest request1= ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
         SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
         model.addAttribute("user",user1);
-        return "edit_pro";
+        return "pro/edit_pro";
 
     }
     // 访问所有sevProject列表
@@ -216,7 +225,7 @@ public class SevProjectController {
         SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
         model.addAttribute("user",user1);
   //      System.out.println("session2... username:"+user1.getUsername()+";password:"+user1.getPassword());
-        return "sevproject_list";
+        return "pro/sevproject_list";
 
     }
 
@@ -233,7 +242,7 @@ public class SevProjectController {
         HttpServletRequest request1= ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
         SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
         model.addAttribute("user",user1);
-        return "sevproject_list";
+        return "pro/sevproject_list";
 
     }
 

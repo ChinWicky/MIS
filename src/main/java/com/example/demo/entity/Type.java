@@ -11,7 +11,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author Wicky
- * @since 2018-04-18
+ * @since 2018-03-26
  */
 public class Type extends Model<Type> {
 

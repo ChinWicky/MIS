@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * </p>
  *
  * @author Wicky
- * @since 2018-04-18
+ * @since 2018-03-26
  */
 public interface TypeDao extends BaseMapper<Type> {
 

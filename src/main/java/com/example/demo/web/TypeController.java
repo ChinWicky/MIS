@@ -38,7 +38,7 @@ public class TypeController extends GlobalMethodSecurityConfiguration{
         HttpServletRequest request1= ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
         model.addAttribute("user",user1);
-        return "type_list";
+        return "type/type_list";
 
     }
 
@@ -48,7 +48,7 @@ public class TypeController extends GlobalMethodSecurityConfiguration{
         HttpServletRequest request1= ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
         model.addAttribute("user",user1);
-        return "add_type";
+        return "type/add_type";
 
     }
 
@@ -64,7 +64,7 @@ public class TypeController extends GlobalMethodSecurityConfiguration{
         HttpServletRequest request1= ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
         model.addAttribute("user",user1);
-        return "type_list";
+        return "type/type_list";
         }
 
 
@@ -85,7 +85,7 @@ public class TypeController extends GlobalMethodSecurityConfiguration{
         HttpServletRequest request1= ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
         model.addAttribute("user",user1);
-        return "type_list";
+        return "type/type_list";
     }
 
     //修改种类名称
@@ -102,7 +102,7 @@ public class TypeController extends GlobalMethodSecurityConfiguration{
         HttpServletRequest request1= ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
         SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
         model.addAttribute("user",user1);
-       return "edit_type";
+       return "type/edit_type";
 
     }
 //访问所有type列表
@@ -117,7 +117,7 @@ public class TypeController extends GlobalMethodSecurityConfiguration{
         HttpServletRequest request1= ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
         SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
         model.addAttribute("user",user1);
-       return "type_list";
+       return "type/type_list";
 
     }
 

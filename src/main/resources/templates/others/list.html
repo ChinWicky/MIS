@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+ xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>typeList</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+</head>
+<body class="container">
+<br/>
+<h1>品种列表</h1>
+<br/><br/>
+<div class="with:80%">
+ 
+ <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>#</th>
+            <th>type Name</th>
+			  <th>修改</th>
+			    <th>删除</th>
+           
+        </tr>
+        </thead>
+        <tbody>
+        <tr  th:each="type : ${types}">
+     
+	       <td th:text="${type.typeid}">neo</td>
+            <td th:text="${type.typename}">neo</td>
+			 <td><a th:href="@{/type/toEdit(typeid=${type.typeid})}">edit</a></td>
+            <td><a th:href="@{/type/delete(typeid=${type.typeid})}">delete</a></td>
+     
+        </tr>
+
+        </tbody>
+    </table>
+		
+</div>
+<div class="form-group">
+    <div class="col-sm-2 control-label">
+        <a href="/type/toAdd" th:href="@{/type/toAdd}" class="btn btn-info">add</a>
+		 <a href="/type/toShow" th:href="@{/type/toShow}" class="btn btn-info">查询</a>
+    </div>
+</div>
+
+</body>
+</html>

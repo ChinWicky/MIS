@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
- *
+ * Created by sang on 2017/1/10.
  */
 public class CustomUserService implements UserDetailsService {
     @Autowired
@@ -26,25 +26,28 @@ public class CustomUserService implements UserDetailsService {
     @Autowired
     SysRoleDao roleDao;
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Map map=new HashMap();
-        map.put("username",s);
-        System.out.println("s:"+s);
+        map.put("username",username);
+        System.out.println("s:"+username);
         HttpServletRequest request= ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 
+
         List userList = userDao.selectByMap(map);
-        if (userList.size()==0 ) {
+        if (userList.size() == 0) {
             throw new UsernameNotFoundException("用户名不存在");
         }
         SysUser user = (SysUser)userList.get(0);
+      //  request.addAttribute("user",user);
         request.getSession().setAttribute("user",user);
         SysUser user1 =(SysUser)request.getSession().getAttribute("user");
         System.out.println("session username:"+user1.getUsername()+";password:"+user1.getPassword());
 
+
         //将个人信息显示在网页上
         System.out.println("roleid:"+user.getRoleId());
         SysRole role = roleDao.selectById(user.getRoleId());
-        System.out.println("s:"+s);
+        System.out.println("s:"+username);
         System.out.println("username:"+user.getUsername()+";password:"+user.getPassword());
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         //用于添加用户的权限。只要把用户权限添加到authorities 就万事大吉。
