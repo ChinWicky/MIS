@@ -56,21 +56,18 @@ public class SevProjectController {
         sevProject.setHigPrice(higPrice);
         sevProject.setPriPrice(priPrice);
         sevProject.setTypeid(typeid);
+        sevProject.setType(typeService.selectById(typeid));
 
-        //返回列表
-        Map map=new HashMap();
-        java.util.List<SevProject> sev_projects = sevProjectService.selectByMap(map);
-        model.addAttribute("sev_projects",sev_projects);
-        java.util.List<Type> types = typeService.selectByMap(map);
-        model.addAttribute("types",types);
-        //显示用户名
-        HttpServletRequest request1= ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-        SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
-        model.addAttribute("user",user1);
-        System.out.print("stringname..."+sevProject.getPrice());
         //添加
         this.sevProjectService.insert(sevProject);
-        //返回列表
+
+        GeneralController generalController=new GeneralController();
+        //得到用户
+        model=generalController.returnUser(model);
+        //显示所有种类
+        model= this.returnAllType(model);
+        //显示所有服务
+        model= this.returnAllSevPro(model);
 
         return "pro/sevproject_list";
 
@@ -78,14 +75,11 @@ public class SevProjectController {
 
     @RequestMapping("/toAdd")
     public String ToaddSevProject(HttpServletRequest request,Model model){
-        Map map=new HashMap();
-        java.util.List<Type> types = typeService.selectByMap(map);
-        model.addAttribute("types",types);
-
-        //显示用户名
-        HttpServletRequest request1= ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-        SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
-        model.addAttribute("user",user1);
+        GeneralController generalController=new GeneralController();
+        //得到用户
+        model=generalController.returnUser(model);
+        //显示所有种类
+        model= this.returnAllType(model);
 
         return "pro/add_pro";
 
@@ -94,39 +88,39 @@ public class SevProjectController {
 
     @RequestMapping("/Select")
     public String SelectByName(HttpServletRequest request,Model model){
-        String proName=request.getParameter("proName");
+
         Map map=new HashMap();
         java.util.List<Type> types = typeService.selectByMap(map);
         model.addAttribute("types",types);
-        map.put("pro_name",proName);
-        System.out.print("Select..."+proName);
-        java.util.List<SevProject> sev_projects = sevProjectService.selectByMap(map);
+        String proName=request.getParameter("proName");
+        java.util.List<SevProject> sev_projects = sevProjectService.findByName(proName);
         //返回列表
         model.addAttribute("sev_projects",sev_projects);
 
-        //显示用户名
-        HttpServletRequest request1= ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-        SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
-        model.addAttribute("user",user1);
-
+        GeneralController generalController=new GeneralController();
+        //得到用户
+        model=generalController.returnUser(model);
+        //显示所有种类
+        model= this.returnAllType(model);
         return "pro/sevproject_list";
     }
 
     @RequestMapping("/SelectByType")
-    public String SelectByType(int typeid,Model model){
+    public String SelectByType(HttpServletRequest request,Model model){
         Map map=new HashMap();
         java.util.List<Type> types = typeService.selectByMap(map);
         model.addAttribute("types",types);
-        map.put("typeid",typeid);
-        java.util.List<SevProject> sev_projects = sevProjectService.selectByMap(map);
+        int typeid  = Integer.parseInt(request.getParameter("typeid"));
+        // map.put("typeid",typeid);
+        java.util.List<SevProject> sev_projects = sevProjectService.findType(typeid);
         //返回列表
         model.addAttribute("sev_projects",sev_projects);
 
-        //显示用户名
-        HttpServletRequest request1= ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-        SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
-        model.addAttribute("user",user1);
-
+        GeneralController generalController=new GeneralController();
+        //得到用户
+        model=generalController.returnUser(model);
+        //显示所有种类
+        model= this.returnAllType(model);
         return "pro/sevproject_list";
     }
 
@@ -134,17 +128,14 @@ public class SevProjectController {
     @RequestMapping("/delete")
     public String deleteSevProject(int proId,Model model){
         this.sevProjectService.deleteById(proId);
-        //返回列表
-        Map map=new HashMap();
-        java.util.List<SevProject> sev_projects = sevProjectService.selectByMap(map);
-        model.addAttribute("sev_projects",sev_projects);
-        java.util.List<Type> types = typeService.selectByMap(map);
-        model.addAttribute("types",types);
 
-        //显示用户名
-        HttpServletRequest request1= ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-        SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
-        model.addAttribute("user",user1);
+        GeneralController generalController=new GeneralController();
+        //得到用户
+        model=generalController.returnUser(model);
+        //显示所有种类
+        model= this.returnAllType(model);
+        //显示所有服务
+        model= this.returnAllSevPro(model);
         return "pro/sevproject_list";
     }
 
@@ -172,21 +163,17 @@ public class SevProjectController {
         sevProject.setHigPrice(higPrice);
         sevProject.setPriPrice(priPrice);
         sevProject.setTypeid(typeid);
-
+        sevProject.setType(typeService.selectById(typeid));
 
         //添加
         sevProjectService.updateById(sevProject);
-        //返回列表
-        Map map=new HashMap();
-        java.util.List<SevProject> sev_projects = sevProjectService.selectByMap(map);
-        model.addAttribute("sev_projects",sev_projects);
-        java.util.List<Type> types = typeService.selectByMap(map);
-        model.addAttribute("types",types);
-
-        //显示用户名
-        HttpServletRequest request1= ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-        SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
-        model.addAttribute("user",user1);
+        GeneralController generalController=new GeneralController();
+        //得到用户
+        model=generalController.returnUser(model);
+        //显示所有种类
+        model= this.returnAllType(model);
+        //显示所有服务
+        model= this.returnAllSevPro(model);
         return "pro/sevproject_list";
     }
 
@@ -196,17 +183,15 @@ public class SevProjectController {
         int proId = Integer.parseInt(request.getParameter("proId"));
         SevProject sevProject=new SevProject();
         sevProject=sevProjectService.selectById(proId);
-       model.addAttribute("proId",proId);
+        model.addAttribute("proId",proId);
         model.addAttribute("sevProject",sevProject);
-       // System.out.print("ToEdit。。。。。"+proId);
-        Map map=new HashMap();
-        java.util.List<Type> types = typeService.selectByMap(map);
-        model.addAttribute("types",types);
 
-        //显示用户名
-        HttpServletRequest request1= ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-        SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
-        model.addAttribute("user",user1);
+        GeneralController generalController=new GeneralController();
+        //得到用户
+        model=generalController.returnUser(model);
+        //显示所有种类
+        model= this.returnAllType(model);
+
         return "pro/edit_pro";
 
     }
@@ -214,36 +199,47 @@ public class SevProjectController {
 
     @RequestMapping("/list")
     public String showSevProject(Model model){
-        Map map=new HashMap();
-        java.util.List<SevProject> sev_projects = sevProjectService.selectByMap(map);
-        model.addAttribute("sev_projects",sev_projects);
-        java.util.List<Type> types = typeService.selectByMap(map);
-        model.addAttribute("types",types);
-
-        //显示用户名
-        HttpServletRequest request1= ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-        SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
-        model.addAttribute("user",user1);
-  //      System.out.println("session2... username:"+user1.getUsername()+";password:"+user1.getPassword());
+        GeneralController generalController=new GeneralController();
+        //得到用户
+        model=generalController.returnUser(model);
+        //显示所有种类
+        model= this.returnAllType(model);
+        //显示所有服务
+        model= this.returnAllSevPro(model);
         return "pro/sevproject_list";
 
     }
 
     @RequestMapping("/byidlist")
     public String showSevProjectById(HttpServletRequest request,Model model){
-        Map map=new HashMap();
         int typeid = Integer.parseInt(request.getParameter("typeid"));
         Type type=new Type();
         type=typeService.selectById(typeid);
-        java.util.List<Type> types = typeService.selectByMap(map);
-        model.addAttribute("types",types);
         model.addAttribute("type",type);
-        //显示用户名
-        HttpServletRequest request1= ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-        SysUser user1 =(SysUser)request1.getSession().getAttribute("user");
-        model.addAttribute("user",user1);
+
+        GeneralController generalController=new GeneralController();
+        //得到用户
+        model=generalController.returnUser(model);
+        //显示所有种类
+        model= this.returnAllType(model);
+
         return "pro/sevproject_list";
 
+    }
+    //通用方法查所有种类
+    public Model returnAllType(Model model){
+        Map map=new HashMap();
+        java.util.List<Type> types = typeService.selectByMap(map);
+        model.addAttribute("types",types);
+        return model;
+
+    }
+
+    //通用方法查所有服务
+    public Model returnAllSevPro(Model model){
+        java.util.List<SevProject> sev_projects = sevProjectService.findAll();
+        model.addAttribute("sev_projects",sev_projects);
+        return model;
     }
 
 }

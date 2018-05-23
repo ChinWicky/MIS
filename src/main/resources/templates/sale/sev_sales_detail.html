@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta charset="utf-8">
+    <title>Twenty Four</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link href=" /static/lib/bootstrap/css/bootstrap.css"
+          th:href="@{/lib/bootstrap/css/bootstrap.css}"
+
+          rel="stylesheet" media="screen" />
+    <link href=" /static/lib/bootstrap/css/bootstrap-responsive.css"
+          th:href="@{/lib/bootstrap/css/bootstrap-responsive.css}"
+          rel="stylesheet" media="screen" />
+    <link href=" /static/stylesheets/theme.css"
+          th:href="@{/stylesheets/theme.css}"
+          rel="stylesheet" media="screen" />
+    <link href=" /static/lib/font-awesome/css/font-awesome.css"
+          th:href="@{/lib/font-awesome/css/font-awesome.css}"
+          rel="stylesheet" media="screen" />
+    <script href=" /static/lib/jquery-1.8.1.min.js"
+            th:href="@{/lib/jquery-1.8.1.min.js}"></script>
+
+    <!-- Demo page code -->
+
+    <style type="text/css">
+        #line-chart {
+            height:300px;
+            width:800px;
+            margin: 0px auto;
+            margin-top: 1em;
+        }
+        .brand { font-family: georgia, serif; }
+        .brand .first {
+            color: #ccc;
+            font-style: italic;
+        }
+        .brand .second {
+            color: #fff;
+            font-weight: bold;
+        }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href=" /assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href=" /assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href=" /assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href=" /assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href=" /assets/ico/apple-touch-icon-57-precomposed.png">
+
+    <script type="text/javascript">
+        //加入购物车=================================================
+        //调用此函数时传入了this,声明参数来接收它,参数名不能叫this(关键字)
+        function addCart(btn){
+            //获取按钮的爷爷
+            var tr = btn.parentNode.parentNode;
+            //获取tr的所有孩子(tds)
+            var tds = tr.getElementsByTagName("td");
+            //获取第1个td的内容(销售编号)
+            var set_meal_sale_id = tds[0].innerHTML;
+            //获取第2个td的内容(服务项目名)
+            var pro_id = tds[1].innerHTML;
+            //获取第3个td的内容(服务价格)
+            var post_discount_price = tds[2].innerHTML;
+            //创建一个新的tr,设置内容,追加到tbody下
+            var newtr = document.createElement("tr");
+            newtr.innerHTML = '<td>'+name+'</td>'+
+                '<td>'+post_discount_price+'</td><td align="center">'+
+                '<input type="button" value="-" onclick="decrease(this);"/> '+
+                '<input type="text" size="3" readonly value="1"/> '+ '</td>'+
+                '<input type="button" value="+" onclick="increase(this);"/>'+
+                '</td>'+
+                '<td>'+post_discount_price+'</td>'+
+                '<td align="center"><input type="button" value="x" onclick="drop(this);"/></td>';//添加删除事件
+            var tbody = document.getElementById("goods");
+            tbody.appendChild(newtr);
+            sum();
+        }
+
+        //加法 数量不能大于库存========================================
+        function increase(btn){
+            //获取按钮的父亲
+            var td3 = btn.parentNode;
+            //获取td3内的文本框
+            var text = td3.getElementsByTagName("input")[1];
+            //获取文本框内值+1后写回文本框
+            var amount = text.value;
+            text.value = ++amount;
+            //获取td3的哥哥td2,从中取出单价
+            var td2 = td3.parentNode.getElementsByTagName("td")[2];
+            var post_discount_price = td2.innerHTML;
+            //计算金额
+            var mny = post_discount_price*amount;
+            //获取td3的弟弟td4,将金额写回td4
+            var td4 = td3.parentNode.getElementsByTagName("td")[4];
+            td4.innerHTML = mny;
+            sum();
+        }
+        //减法 数量不能小于1 =================================================
+        function decrease(btn){
+            //获取按钮的父亲td3
+            var td3 = btn.parentNode;
+            //获取td3的文本框
+            var text = td3.getElementsByTagName("input")[1];
+            //获取文本框的值-1写回文本框
+            var amount = text.value;
+            if(amount<1){
+                text.value = 0;
+            }
+            if(amount>0){
+                text.value = --amount;
+            }
+            //获取td3的哥哥td2,从中取回单价
+            var td2 = td3.parentNode.getElementsByTagName("td")[2];
+            var post_discount_price = td1.innerHTML;
+            //计算金额
+            var mny = post_discount_price*amount;
+            //获取td3的弟弟td4,将金额写入td4
+            var td4 = td3.parentNode.getElementsByTagName("td")[4];
+            td4.innerHTML = mny;
+            sum();
+        }
+
+        //删除tr行,而不是删除tr行中所有td====================
+        function drop(btn){
+            var tr = btn.parentNode.parentNode;
+            var tbody = document.getElementById("goods");
+            tbody.removeChild(tr);
+            sum();
+        }
+        //计算总金额
+        function sum() {
+            //获取购物车内所有的数据行
+            var tbody =
+                document.getElementById("goods");
+            var trs =
+                tbody.getElementsByTagName("tr");
+            //遍历这些行
+            var s = 0;
+            for(var i=0;i<trs.length;i++) {
+                //获取每一行下第5个td的内容(金额)
+                var mny =
+                    trs[i].getElementsByTagName("td")[4].innerHTML;
+                //累加
+                s += parseFloat(mny);
+            }
+            //将合计值写入合计列(id="total")
+            var td =
+                document.getElementById("total");
+            td.innerHTML = s;
+        }
+    </script>
+</head>
+
+<!--[if lt IE 7 ]> <body class="ie ie6"> <![endif]-->
+<!--[if IE 7 ]> <body class="ie ie7"> <![endif]-->
+<!--[if IE 8 ]> <body class="ie ie8"> <![endif]-->
+<!--[if IE 9 ]> <body class="ie ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<body>
+<!--<![endif]-->
+
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <ul class="nav pull-right">
+
+                <!--<li id="fat-menu" class="dropdown">-->
+                <!--<a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">-->
+                <i class="icon-user" th:text="${user.username}"></i>
+                <button class="btn btn-primary"><i class="icon-off"></i> <a th:href="@{/logout}"> 注销</a></button>
+                <b class="caret"></b></a>
+                <!--<i class="icon-caret-down"></i>-->
+                <!--</a>-->
+
+                <!--<ul class="dropdown-menu">-->
+                <!--<li><a tabindex="-1" href="#">Settings</a></li>-->
+                <!--&lt;!&ndash;<li class="divider"></li>&ndash;&gt;-->
+                <!--<li><a tabindex="-1" href="@{/login/logout}">注销</a></li>-->
+                <!--</ul>-->
+                <!--</li>-->
+
+            </ul>
+            <a class="brand" href="index.html"><span class="first">My</span> <span class="second">Beauty</span></a>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+
+    <div class="row-fluid">
+        <div class="span3">
+            <div class="sidebar-nav">
+                <div class="nav-header" data-toggle="collapse" data-target="#dashboard-menu"><i class="icon-dashboard"></i>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    b</div>
+                <ul id="dashboard-menu" class="nav nav-list collapse in" th:each="type : ${types}">
+                    <br>
+                    <font size=4>       <a th:href="@{/sevProject/SelectByType(typeid=${type.typeid})}"><li th:text="${type.typename}">neo&nbsp&nbsp&nbsp&nbsp&nbsp</li></a>  </font>
+
+
+                </ul>
+                <div class="nav-header" data-toggle="collapse" data-target="#accounts-menu"><i class="icon-briefcase"></i>Account<span class="label label-info">+10</span></div>
+                <ul id="accounts-menu" class="nav nav-list collapse in">
+                    <li ><a th:href="@{/transaction/toPhone}">新的交易</a></li>
+                    <li ><a th:href="@{/transaction/toOrder}">查看订单</a></li>
+                    <li ><a href="reset-password.html">Reset Password</a></li>
+                </ul>
+
+                <div class="nav-header" data-toggle="collapse" data-target="#settings-menu"><i class="icon-exclamation-sign"></i>Error Pages</div>
+                <ul id="settings-menu" class="nav nav-list collapse in">
+                    <li ><a href="403.html">403 page</a></li>
+                    <li ><a href="404.html">404 page</a></li>
+                    <li ><a href="500.html">500 page</a></li>
+                    <li ><a href="503.html">503 page</a></li>
+                </ul>
+
+                <div class="nav-header" data-toggle="collapse" data-target="#legal-menu"><i class="icon-legal"></i>Legal</div>
+                <ul id="legal-menu" class="nav nav-list collapse in">
+                    <li ><a href="privacy-policy.html">开始交易</a></li>
+                    <li ><a href="terms-and-conditions.html">Terms and Conditions</a></li>
+                </ul>
+            </div>
+        </div>
+        <!--<div class="span9">-->
+            <!--<form id="tab">-->
+                <!--<h1 class="page-title"> <input type="text" class="search-query" name="proName"  /></h1>-->
+                <!--<div class="btn-toolbar"  >-->
+
+            <!--</form>-->
+
+            <!--<div  >-->
+
+                <!--<div  style="display: inline" >-->
+                    <!--&lt;!&ndash;<style>&ndash;&gt;-->
+                    <!--&lt;!&ndash;div{ display:inline}&ndash;&gt;-->
+                    <!--&lt;!&ndash;</style>&ndash;&gt;-->
+                    <!--<button sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary"><i class="icon-adjust"></i>  <a th:href="@{/type/list}">管理</a></button>-->
+                    <!--<button sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary"><i class="icon-plus"></i> <a th:href="@{/sevProject/toAdd}"> 添加</a></button>-->
+                    <!--<button class="btn btn-primary" onclick="return addType()"> <i class="icon-search"></i> 查找</button>-->
+
+                <!--</div>-->
+
+
+                <!--<button class="btn">Import</button>-->
+                <!--<button class="btn">Export</button>-->
+
+
+            </div>
+            <div class="btn-group">
+            </div>
+        </div>
+        <div class="well">
+            <form>
+            <h1>明细</h1>
+            <form>
+            <table class="table" >
+                <thead>
+                <tr>
+                    <th>销售编号</th>
+                    <th>服务项目名</th>
+                    <th>服务价格</th>
+                    <th>次卡剩余数</th>
+                    <th>支付方式</th>
+                    <th>服务人员</th>
+
+
+
+                    <th style="width: 26px;"></th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr  th:each="sev_sales_details : ${session.cart.items}">
+
+                    <td th:text="${sev_sales_details.salesId}">neo</td>
+                    <td th:text="${sev_sales_details.proId}">neo</td>
+                    <td th:text="${sev_sales_details.postDiscountPrice}">neo</td>
+                    <td > <select ><option  id="0">现金</option> <option id="1" >次卡</option></select></td>
+                    <td th:text="${sev_sales_details.paymentMethod}"> <select id="sel_menu" ></select></td>
+                    <td th:text="${sev_sales_details.quantity}">neo</td>
+
+
+                    <td  >
+                        <button  th:href="@{/sevProject/delete(proId=${sev_project.proId})}"   onClick=addCart(this); ><i class="icon-plus"></i></button>
+                        <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/sevProject/toEdit(proId=${sev_project.proId})}"><i class="icon-pencil"></i></a>
+                        <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/sevProject/delete(proId=${sev_project.proId})}"   onClick=M() ><i class="icon-remove"></i></a>
+                    </td>
+
+
+                </tr>
+
+
+                </tbody>
+            </table>
+            </form>
+        </div>
+
+<div class="pagination">
+    <ul>
+        <li><a href="#">Prev</a></li>
+        <li><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">Next</a></li>
+    </ul>
+
+</div>
+        <div class="well">
+            <form>
+            <h1>总表</h1>
+            <table>
+                <thead>
+                <tr>
+                    <th>销售编号</th>
+                    <th>服务项目名</th>
+                    <th>服务价格</th>
+                    <th>数量</th>
+                    <th>金额(元)</th>
+                    <th>会员编号</th>
+                    <th>删除</th>
+                </tr>
+                </thead>
+                <tbody id="goods">
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="3" align="right">总计</td>
+                    <td id="total"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="right">折后价</td>
+                    <td id="rtotal"></td>
+                    <td></td>
+                </tr>
+                </tfoot>
+            </table>
+            </form>
+           <button class="icon-ok-circle" onclick="return N()" >支付</button>
+
+        </div>
+    </div>
+
+
+
+
+    <footer>
+
+    </footer>
+
+
+</div>
+
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+
+
+
+<script href="../static/lib/bootstrap/js/bootstrap.js"
+        th:href="@{/lib/bootstrap/js/bootstrap.js}"></script>
+
+<script language='vbscript'>
+ nerText=cstr(int( nertext)+int( nertext))
+</script>
+
+<script type=text/javascript>
+    function waiter(){
+        $.post("<%=path%>/ / ", {} , function(data){
+
+            var res = $.parseJSON(data);
+            $("#sel_menu").html("<option>服务员名称</option>");
+            $.each(res, function(i, n) {
+                $("#sel_menu").append(
+                    "<option value=" + n.genre + ">" + n.genre
+                    + "</option>")});});
+    }
+
+
+
+</script>
+
+<SCRIPT type="text/javascript">
+    function N(){
+        if(confirm("确认支付吗?")){
+            return true;
+        }else{
+            return false;
+        }
+    }
+</SCRIPT>
+
+
+
+<script type="text/javascript">
+    function M( ){
+        var Mybool=confirm("确定删除？");
+        if(!Mybool)
+            window.event.returnValue=false
+    }
+
+
+</script>
+
+<script type="text/javascript">
+    //修改品种名
+    function addType() {
+        var form = document.forms[0];
+        form.action = "http://localhost:8080/sevProject/Select";
+        form.method = "post";
+        form.submit();
+    }
+</script>
+
+
+
+</body>
+</html>
+
+

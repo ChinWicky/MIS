@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.SevSalesDao">
+
+    <!-- 开启二级缓存 -->
+    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.demo.entity.SevSales">
+        <id column="sales_id" property="salesId" />
+        <result column="sales_time" property="salesTime" />
+        <result column="total_price" property="totalPrice" />
+        <result column="customer_id" property="customerId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        sales_id AS salesId,
+        sales_time AS salesTime,
+        total_price AS totalPrice,
+        customer_id AS customerId,
+        pay.pay_price AS "pay.payPrice",
+        pay.payment_time AS "pay.paymentTime",
+        sales_id,
+        sales_time,
+        total_price,
+        customer_id
+    </sql>
+
+    <sql id="reservationJoins">
+        LEFT JOIN pay ON pay.sales_id = a.sales_id
+    </sql>
+
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sev_sales a
+        <include refid="reservationJoins"/>
+    </select>
+</mapper>

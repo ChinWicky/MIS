@@ -18,7 +18,35 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        pro_id AS proId, pro_name AS proName, price, ser_time AS serTime, hig_price AS higPrice, pri_price AS priPrice, typeid
+        pro_id AS proId,
+        pro_name AS proName,
+        price,
+        ser_time AS serTime,
+        hig_price AS higPrice,
+        pri_price AS priPrice,
+        type.typename AS "type.typename"
     </sql>
+    
+    <sql id="reservationJoins">
+        LEFT JOIN type ON type.typeid = a.typeid
+    </sql>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT
+           <include refid="Base_Column_List"/>
+        FROM sev_project a
+          <include refid="reservationJoins"/>
+    </select>
+
+    <select id="findType" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sev_project a
+        <include refid="reservationJoins"/>
+        WHERE a.typeid = #{id}
+    </select>
+
+
+
 
 </mapper>

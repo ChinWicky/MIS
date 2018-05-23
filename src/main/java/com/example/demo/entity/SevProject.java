@@ -32,6 +32,8 @@ public class SevProject extends Model<SevProject> {
     @TableField("pri_price")
     private Double priPrice;
     private Integer typeid;
+    @TableField(exist = false)
+    private Type type;
 
 
     public Integer getProId() {
@@ -90,6 +92,12 @@ public class SevProject extends Model<SevProject> {
         this.typeid = typeid;
     }
 
+    public Type getType() { return type; }
+    
+    public void setType(Type type) {
+        this.type = type;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.proId;
@@ -104,7 +112,7 @@ public class SevProject extends Model<SevProject> {
         ", serTime=" + serTime +
         ", higPrice=" + higPrice +
         ", priPrice=" + priPrice +
-        ", typeid=" + typeid +
+        ", typeid=" + typeid+
         "}";
     }
 }
