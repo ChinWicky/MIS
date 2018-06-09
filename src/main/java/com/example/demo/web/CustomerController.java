@@ -2,7 +2,6 @@ package com.example.demo.web;
 
 import com.example.demo.entity.Customer;
 import com.example.demo.entity.SecondaryCard;
-import com.example.demo.entity.SevProject;
 import com.example.demo.entity.Type;
 import com.example.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,7 @@ public class CustomerController extends GlobalMethodSecurityConfiguration {
         HttpSession session = request.getSession();
         double i = 0;
         //临时
-        customer.setBirth(new Date());
+       // customer.setBirth(new Date());
         customer.setHistoryTotalPrice(i);
         customer.setCustomerRoleId(2);//初级会员
         this.customerService.insert(customer);
@@ -72,8 +71,13 @@ public class CustomerController extends GlobalMethodSecurityConfiguration {
 
 
     @RequestMapping("/delete")
-    public String deleteCustomer(int customerid, Model model) {
-        this.customerService.deleteById(customerid);
+    public String deleteCustomer(HttpServletRequest request, Model model) {
+        int customerId = Integer.parseInt(request.getParameter("customerId"));
+        this.customerService.deleteById(customerId);
+        HttpSession session = request.getSession();
+        session.setAttribute("customers",customerService.findAll());
+
+
         GeneralController generalController = new GeneralController();
         //得到用户
         generalController.returnUser(model);
@@ -89,16 +93,16 @@ public class CustomerController extends GlobalMethodSecurityConfiguration {
     public String editCustomer(Model model,HttpServletRequest request) {
 
         HttpSession session = request.getSession();
-        Customer customer1 = (Customer) session.getAttribute("customer");
+        Customer customer = (Customer) session.getAttribute("customer");
 
         String phone1=request.getParameter("phone");
-        customer1.setPhone(phone1);
+        customer.setPhone(phone1);
 
         System.out.println("shoujihao"+phone1);
-        System.out.println("id"+customer1.getCustomerId());
+        System.out.println("id"+customer.getCustomerId());
 
-        customerService.updateById(customer1);
-        session.setAttribute("customer", customer1);
+        customerService.updateById(customer);
+        session.setAttribute("customer", customer);
         GeneralController generalController = new GeneralController();
         //得到用户
         generalController.returnUser(model);
@@ -110,8 +114,10 @@ public class CustomerController extends GlobalMethodSecurityConfiguration {
 
     //修改用户信息
     @RequestMapping("/toEdit")
-    public String toEditCustomer(Model model) {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+    public String toEditCustomer(HttpServletRequest request,Model model,HttpSession session) {
+        int customerId = Integer.parseInt(request.getParameter("customerId"));
+        Customer customer = this.customerService.findById(customerId);
+        session.setAttribute("customer",customer);
 
         GeneralController generalController = new GeneralController();
         //得到用户

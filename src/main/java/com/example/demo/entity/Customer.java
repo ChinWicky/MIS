@@ -5,6 +5,8 @@ import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 
 /**
@@ -23,6 +25,7 @@ public class Customer extends Model<Customer> {
     private Integer customerId;
     private String name;
     private String phone;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birth;
     @TableField("customer_role_id")
     private Integer customerRoleId;
@@ -38,9 +41,6 @@ public class Customer extends Model<Customer> {
     public void setCustomerRole(CustomerRole customerRole) {
         this.customerRole = customerRole;
     }
-
-
-
 
     public Integer getCustomerId() {
         return customerId;

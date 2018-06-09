@@ -132,7 +132,7 @@
             </div>
         </div>
         <div class="span9">
-            <h1 class="page-title">客户</h1>
+            <h1 class="page-title">新增会员</h1>
             <div class="btn-toolbar">
                 <button class="btn btn-primary" onclick="return addType()"><i class="icon-save"></i>保存</button>
 
@@ -141,7 +141,6 @@
                 </div>
             </div>
             <div class="well">
-                <
                 <div id="myTabContent" class="tab-content">
                     <div class="tab-pane active in" id="home">
                         <form id="tab">
@@ -150,28 +149,13 @@
                             <label>手机号</label>
                             <input type="text" class="input-xlarge" name="phone"/>
                             <label>生日</label>
-                            <input type="text" class="input-xlarge" name="birth"/>
+                            <input type="date" class="input-xlarge" name="birth"/>
 
                         </form>
                     </div>
 
                 </div>
 
-            </div>
-
-            <div class="modal small hide fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="myModalLabel">Delete Confirmation</h3>
-                </div>
-                <div class="modal-body">
-
-                    <p class="error-text"><i class="icon-warning-sign modal-icon"></i>Are you sure you want to delete the user?</p>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                    <button class="btn btn-danger" data-dismiss="modal">Delete</button>
-                </div>
             </div>
 
         </div>
@@ -196,6 +180,8 @@
     <script type="text/javascript">
         //修改品种名
         function addType() {
+
+
             var form = document.forms[0];
             form.action = "http://localhost:8080/customer/add";
             form.method = "post";
