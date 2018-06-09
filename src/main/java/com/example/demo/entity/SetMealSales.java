@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import com.baomidou.mybatisplus.enums.IdType;
+import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
@@ -13,7 +14,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author Wicky
- * @since 2018-05-03
+ * @since 2018-06-02
  */
 @TableName("set_meal_sales")
 public class SetMealSales extends Model<SetMealSales> {
@@ -26,6 +27,8 @@ public class SetMealSales extends Model<SetMealSales> {
     private Integer customerId;
     @TableField("set_meal_id")
     private Integer setMealId;
+    @TableField("set_meal_sales_time")
+    private Date setMealSalesTime;
 
 
     public Integer getSetMealSaleId() {
@@ -52,6 +55,14 @@ public class SetMealSales extends Model<SetMealSales> {
         this.setMealId = setMealId;
     }
 
+    public Date getSetMealSalesTime() {
+        return setMealSalesTime;
+    }
+
+    public void setSetMealSalesTime(Date setMealSalesTime) {
+        this.setMealSalesTime = setMealSalesTime;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.setMealSaleId;
@@ -63,6 +74,7 @@ public class SetMealSales extends Model<SetMealSales> {
         "setMealSaleId=" + setMealSaleId +
         ", customerId=" + customerId +
         ", setMealId=" + setMealId +
+        ", setMealSalesTime=" + setMealSalesTime +
         "}";
     }
 }

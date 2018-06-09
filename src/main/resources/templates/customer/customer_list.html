@@ -122,57 +122,79 @@
             </div>
         </div>
         <div class="span9">
-            <form id="tab1" name="form0">
-                <h1 class="page-title"> <input type="text" class="search-query" name="proName"  /></h1>
+            <form id="tab">
+                <h1 class="page-title"> <input type="text" class="search-query" name="phone"  /></h1>
                 <div class="btn-toolbar"  >
                 </div>
             </form>
+
+
+
                 <div  style="display: inline" >
-                    <button class="btn btn-primary" onclick="return findSev()"> <i class="icon-search"></i> 查找</button>
+                    <!--<style>-->
+                    <!--div{ display:inline}-->
+                    <!--</style>-->
+                     <button sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary"><i class="icon-plus"></i> <a th:href="@{/customer/toAdd}"> 添加</a></button>
+                    <button class="btn btn-primary" onclick="return find()"> <i class="icon-search"></i> 查找</button>
+
                 </div>
-            <div class="well">
-                <table class="table">
-                    <thead>
-                    <tr>  <th>服务名</th>
-                        <th>折后价</th>
-                        <th>服务员姓名</th>
-                        <th>数量</th>
-                        <th>是否有次卡可用</th>
-                        <th>支付方式</th>
-                        <th>更改支付方式</th>
 
-                        <th style="width: 26px;"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <button class="btn btn-primary" onclick="return order()"><i class="icon-plus">支付</i></button>
-                    <!--<a  th:href="@{/transaction/placeOrder}"> 支付</a>-->
-                    <tr  th:each="item : ${session.cart.items}">
 
-                        <td th:text="${item.proName}">neo</td>
-                        <td th:text="${item.tSevSalesDetails.postDiscountPrice}">neo</td>
-                        <td th:text="${item.tSevSalesDetails.waiter.waiterName}">neo</td>
-                        <td th:text="${item.tSevSalesDetails.quantity}">neo</td>
-                        <td th:text="${item.check}">neo</td>
-                        <td th:text="${item.tSevSalesDetails.paymentMethod}">neo</td>
+                <!--<button class="btn">Import</button>-->
+                <!--<button class="btn">Export</button>-->
 
-                        <form id="tab" action="http://localhost:8080/transaction/SetPayment" method="post" name="form1">
-                            <td  th:if="${item.check== '是'}"> <select name="paymentMethod"><option name="paymentMethod" value="现金支付">现金</option> <option  name="paymentMethod" value="次卡支付">次卡</option></select></td>
-                            <td th:if="${item.check== '否'}"> <select name="paymentMethod"><option name="paymentMethod" value="现金支付" selected>现金</option></select></td>
 
-                            <input  type="hidden" name="proId" th:value="${item.tSevSalesDetails.proId}"/>
-                            <input  type="hidden" name="postDiscountPrice" th:value="${item.tSevSalesDetails.postDiscountPrice}"/>
-                            <input  type="hidden" name="waiterId" th:value="${item.tSevSalesDetails.waiterId}"/>
-                            <input  type="hidden" name="quantity" th:value="${item.tSevSalesDetails.quantity}"/>
-                            <td >  <input type="submit" value="确定"/> </td>
-                        </form>
 
-                    </tr>
 
-                    </tbody>
-                </table>
-            </div>
+        <div class="well">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>用户Id</th>
+                    <th>名字</th>
+                    <th>手机号</th>
+                    <th>生日</th>
+                    <th>会员类型</th>
+                    <th>消费总额</th>
+                    <th>开始新交易</th>
+                    <th>查看会员详细信息</th>
 
+                    <th style="width: 26px;"></th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr  th:each="customer : ${session.customers}">
+
+                    <td th:text="${customer.customerId}">neo</td>
+                    <td th:text="${customer.name}">neo</td>
+
+                    <td th:text="${customer.phone}">neo</td>
+                    <td th:text="${customer.birth}">neo</td>
+                    <td th:text="${customer.customerRole.getCustomerRoleName()}">neo</td>
+                    <td th:text="${customer.historyTotalPrice}">neo</td>
+                    <td> <button> <a th:href="@{/transaction/start(customerId=${customer.customerId})}">新的交易</a></button>
+                    <td> <button> <a th:href="@{/customer/SelectById(customerId=${customer.customerId})}">详细信息</a></button>
+                    </td>
+
+<!--<form>-->
+                    <!--<td th:text="${sev_project.priPrice}">neo</td>-->
+                    <!--<td th:text="${sev_project.typeid}">neo</td>-->
+<!--</form>-->
+                    <td  >
+
+
+                        <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/customer/toEdit(customerId=${customer.customerId})}"><i class="icon-pencil"></i></a>
+                        <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{ /customer/delete(customerId=${customer.customerId})}"   onClick=M() ><i class="icon-remove"></i></a>
+                    </td>
+
+
+                </tr>
+
+
+                </tbody>
+            </table>
+        </div>
         <div class="pagination">
             <ul>
                 <li><a href="#">Prev</a></li>
@@ -184,65 +206,7 @@
             </ul>
         </div>
 
-            <div class="well">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>服务项目名</th>
-                        <th>普通价格</th>
-                        <th>服务时长</th>
-                        <th>高级会员价</th>
-                        <th>初级会员价</th>
-                        <th>类别名</th>
-                        <th>服务人员</th>
-                        <th>数量</th>
-                        <th style="width: 26px;"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
 
-                    <tr  th:each="sev_project : ${sev_projects}">
-
-
-                        <td th:text="${sev_project.proName}">neo</td>
-                        <td th:text="${sev_project.price}">neo</td>
-                        <td th:text="${sev_project.serTime}">neo</td>
-                        <td th:text="${sev_project.higPrice}">neo</td>
-                        <td th:text="${sev_project.priPrice}">neo</td>
-                        <td th:text="${sev_project.type.typename}">neo</td>
-
-                        <form id="tab2" action="http://localhost:8080/transaction/addToCart" method="post" name="form3">
-                            <td >
-                                <select name="waiterId">
-                                    <option>请选择</option>
-                                    <option  th:each="waiter:${session.waiters}" th:value="${waiter.waiterId}" th:text="${waiter.waiterName}"></option>
-                                </select>
-                            </td>
-                            <td > <select name="quantity">
-                                <option name="quantity" value=1 selected>1</option>
-                                <option  name="quantity" value=2 >2</option>
-                                <option name="quantity" value=3>3</option>
-                                <option  name="quantity" value=4 >4</option>
-                                <option name="quantity" value=5 >5</option>
-                                <option  name="quantity" value=6 >6</option>
-                                <option name="quantity" value=7 >7</option>
-                                <option  name="quantity" value=8 >8</option>
-                                <option name="quantity" value=9 >9</option>
-                                <option  name="quantity" value=10 >10</option>
-                            </select></td>
-
-                            <input  type="hidden" name="proId" th:value="${sev_project.proId}"/>
-                            <td >  <input type="submit" value="添加到购物车"/> </td>
-                        </form>
-
-
-                    </tr>
-
-
-                    </tbody>
-                </table>
-
-            </div>
 
     </div>
 
@@ -266,30 +230,29 @@
         th:href="@{/lib/bootstrap/js/bootstrap.js}"></script>
 
 
-    <script type="text/javascript">
-        function findSev() {
-            var form = document.forms[0];
-            form.action = "http://localhost:8080/transaction/Select";
-            form.method = "post";
-            form.submit();
-        }
 
-    </script>
-    <script LANGUAGE=javascript>
-        function order() {
-            var msg = "确定要下订单吗？";
-            if (confirm(msg)==true)
-                window.location.href="http://localhost:8080/transaction/placeOrder";
-                //pay();
 
-        }
-        // function pay() {
-        //     var msg = "总价格为"+"？\n\n请确认！";
-        //     if (confirm(msg)==true){
-        //         window.location.href="http://localhost:8080/transaction/pay";
-        //     }
-        // }
-    </script>
+
+
+<script type="text/javascript">
+    function M( ){
+        var Mybool=confirm("确定删除？");
+        if(!Mybool)
+            window.event.returnValue=false
+    }
+
+
+</script>
+
+<script type="text/javascript">
+    //修改品种名
+    function find() {
+        var form = document.forms[0];
+        form.action = "http://localhost:8080/customer/SelectByPhone";
+        form.method = "post";
+        form.submit();
+    }
+</script>
 
 
 </body>

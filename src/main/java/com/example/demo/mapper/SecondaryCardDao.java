@@ -3,6 +3,8 @@ package com.example.demo.mapper;
 import com.example.demo.entity.SecondaryCard;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface SecondaryCardDao extends BaseMapper<SecondaryCard> {
 
+    List<SecondaryCard> findId(int id);
 }

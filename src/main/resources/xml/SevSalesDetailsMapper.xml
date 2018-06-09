@@ -28,11 +28,13 @@
         a.post_discount_price,
         a.payment_method,
         a.quantity,
-        waiter.waiter_name AS "waiter.waitername"
+        waiter.waiter_name AS "waiter.waitername",
+        sev_project.pro_name AS "sevProject.proName"
     </sql>
 
     <sql id="reservationJoins">
         LEFT JOIN waiter ON waiter.waiter_id = a.waiter_id
+        LEFT JOIN sev_project ON sev_project.pro_id = a.pro_id
     </sql>
 
 

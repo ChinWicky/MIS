@@ -25,6 +25,10 @@ public class SetMealSalesDetail extends Model<SetMealSalesDetail> {
     private Integer proId;
     @TableField("total_count")
     private Integer totalCount;
+    @TableField(exist = false)
+    private SetMeal setMeal;
+    @TableField(exist = false)
+    private SevProject sevProject;
 
 
     public Integer getSetMealId() {
@@ -51,10 +55,27 @@ public class SetMealSalesDetail extends Model<SetMealSalesDetail> {
         this.totalCount = totalCount;
     }
 
+    public SetMeal getSetMeal() {
+        return setMeal;
+    }
+
+    public void setSetMeal(SetMeal setMeal) {
+        this.setMeal = setMeal;
+    }
+
+    public SevProject getSevProject() {
+        return sevProject;
+    }
+
+    public void setSevProject(SevProject sevProject) {
+        this.sevProject = sevProject;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.setMealId;
     }
+
 
     @Override
     public String toString() {

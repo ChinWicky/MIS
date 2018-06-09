@@ -5,7 +5,6 @@ import com.example.demo.model.Cart;
 import com.example.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
@@ -53,16 +52,19 @@ public class OrderController extends GlobalMethodSecurityConfiguration {
 
     @RequestMapping("/start")
     public  String startTransaction(HttpServletRequest request,HttpSession session,Model model){
+        int customerId = Integer.parseInt(request.getParameter("customerId"));
         String phone = request.getParameter("phone");
         Map map=new HashMap();
         List<Waiter> waiters = waiterService.selectByMap(map);
         session.setAttribute("waiters",waiters);
-        map.put("phone",phone);
-        List<Customer> customers = customerService.selectByMap(map);
-        if(customers.size()==0){
+//        map.put("phone",phone);
+//        List<Customer> customers = customerService.selectByMap(map);
+//        if(customers.size()==0){
+//            return "500";
+//        }
+        Customer customer = customerService.findById(customerId); //不考虑相同号码
+        if(customer==null)
             return "500";
-        }
-        Customer customer = customers.get(0); //不考虑相同号码
         session.setAttribute("customer",customer);
 
         Cart cart = new Cart(sevProjectService,secondaryCardDetailsService,sevSalesDetailsService,customerService);
@@ -82,6 +84,9 @@ public class OrderController extends GlobalMethodSecurityConfiguration {
 
     @RequestMapping("/toPhone")
     public String toPhone(HttpServletRequest request,Model model){
+
+
+
         GeneralController generalController=new GeneralController();
         //得到用户
         model=generalController.returnUser(model);
@@ -106,7 +111,7 @@ public class OrderController extends GlobalMethodSecurityConfiguration {
         model= this.returnAllType(model);
         //显示所有服务
         model= this.returnAllSevPro(model);
-        return "sale/sev_sales_list";
+        return "sale/order_list";
 
     }
 
@@ -119,7 +124,7 @@ public class OrderController extends GlobalMethodSecurityConfiguration {
         sevSalesDetails.setWaiterId(waiterId);
         sevSalesDetails.setWaiter(waiterService.selectById(sevSalesDetails.getWaiterId()));
         cart.addSevProject(sevSalesDetails);
-        cart.getCostPrice();
+       // cart.getCostPrice();
         session.setAttribute("cart",cart);
 
         GeneralController generalController=new GeneralController();
@@ -160,8 +165,8 @@ public class OrderController extends GlobalMethodSecurityConfiguration {
         int waiterId = Integer.parseInt(request.getParameter("waiterId"));
         sevSalesDetails.setWaiter(waiterService.selectById(waiterId));
       //  System.out.println("次卡支付"+sevSalesDetails.getPaymentMethod());
-        cart.setItemPayment(sevSalesDetails);//如果是次卡支付
-        cart.setSaleCost();//先设置单价
+        cart.updateCart(sevSalesDetails);//如果是次卡支付
+        session.setAttribute("cart",cart);
 
         GeneralController generalController=new GeneralController();
         //得到用户
@@ -179,15 +184,9 @@ public class OrderController extends GlobalMethodSecurityConfiguration {
     public String pay(HttpServletRequest request, HttpSession session, Model model) {
         Cart cart = new Cart(sevProjectService,secondaryCardDetailsService,sevSalesDetailsService,customerService);
         int sevSalesId;
-//        try{
-//          sevSalesId = ((SevSales) session.getAttribute("sevSale")).getSalesId();
-//         }catch (Exception e){
-           sevSalesId = Integer.parseInt(request.getParameter("orderId"));
-      //  }
-
-        //int sevSalesId = Integer.parseInt(request.getParameter("orderId"));
-        SevSales sevSales= sevSalesService.selectById(sevSalesId);
-        try {
+         sevSalesId = Integer.parseInt(request.getParameter("orderId"));
+         SevSales sevSales= sevSalesService.selectById(sevSalesId);
+      try {
             cart.setPay(sevSales);//更新次卡次数，用户消费总价
             sevSales.setState("已支付");
 
@@ -195,17 +194,13 @@ public class OrderController extends GlobalMethodSecurityConfiguration {
             pay.setPaymentTime(new Date());
             pay.setSalesId(sevSales.getSalesId());
             pay.setPayPrice(sevSales.getTotalPrice());
-//            System.out.println("salesIdpay"+pay.getSalesId());
-//            System.out.println("payTime"+pay.getPaymentTime());
-//            System.out.println("payPrice"+pay.getPayPrice());
             payService.insert(pay);
             sevSalesService.updateAllColumnById(sevSales);
-           //session.removeAttribute("sevSales");
             session.setAttribute("sevSales",sevSalesService.selectByMap(new HashMap()));
-        }catch(Exception e){
+     }catch(Exception e){
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             System.out.println("支付失败");
-        }
+     }
         GeneralController generalController=new GeneralController();
         //得到用户
         model=generalController.returnUser(model);
@@ -213,7 +208,7 @@ public class OrderController extends GlobalMethodSecurityConfiguration {
         model= this.returnAllType(model);
         //显示所有服务
         model= this.returnAllSevPro(model);
-        return "sale/sev_sales_list";
+        return "sale/order_list";
     }
 
     //提交订单
@@ -224,7 +219,7 @@ public class OrderController extends GlobalMethodSecurityConfiguration {
         Date time=new Date();
         SevSales sevSales = new SevSales();
         if(cart==null)
-            return "sale/sev_sales_list";
+            return "sale/order_list";
        try {
             sevSales.setCustomerId(customer.getCustomerId());
             sevSales.setTotalPrice(cart.getPaymentPrice());
@@ -232,9 +227,6 @@ public class OrderController extends GlobalMethodSecurityConfiguration {
             sevSales.setState("未支付");
             sevSalesService.insert(sevSales);
             cart.setItem(sevSales);//将消费明细持久到数据库
-           // session.removeAttribute("cart");
-           // session.setAttribute("orderId",sevSales.getSalesId());
-           // session.setAttribute("sevSale",sevSales);
             session.setAttribute("sevSales",sevSalesService.selectByMap(new HashMap()));
        }catch(Exception e){
            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -247,7 +239,7 @@ public class OrderController extends GlobalMethodSecurityConfiguration {
         model= this.returnAllType(model);
         //显示所有服务
         model= this.returnAllSevPro(model);
-        return "sale/sev_sales_list";
+        return "sale/order_list";
     }
 
     //删除订单
@@ -273,7 +265,7 @@ public class OrderController extends GlobalMethodSecurityConfiguration {
         //显示所有服务
         model= this.returnAllSevPro(model);
 
-        return "sale/sev_sales_list";
+        return "sale/order_list";
     }
 
     @RequestMapping("/Select")
@@ -291,10 +283,22 @@ public class OrderController extends GlobalMethodSecurityConfiguration {
         //得到用户
         model=generalController.returnUser(model);
         //显示所有种类
-        model= this.returnAllType(model);
+        this.returnAllType(model);
         return "sale/sevorderlist";
     }
 
+    @RequestMapping("/showOrderDetail")
+    public String showOrderDetail(HttpServletRequest request,Model model){
+        int orderId= Integer.parseInt(request.getParameter("orderId"));
+        List<SevSalesDetails> sevSalesDetailsList = sevSalesDetailsService.findSalesId(orderId);
+        model.addAttribute("sevSalesDetails",sevSalesDetailsList);
+
+        GeneralController generalController=new GeneralController();
+        //得到用户
+        model=generalController.returnUser(model);
+        this.returnAllType(model);
+        return "sale/order_detail";
+    }
 
 
     public Model returnAllType(Model model){
@@ -307,7 +311,6 @@ public class OrderController extends GlobalMethodSecurityConfiguration {
 
     //通用方法查所有服务
     public Model returnAllSevPro(Model model){
-       // Map map=new HashMap();
         List<SevProject> sev_projects = sevProjectService.findAll();
         model.addAttribute("sev_projects",sev_projects);
         return model;

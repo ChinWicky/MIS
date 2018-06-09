@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.service.IService;
  * </p>
  *
  * @author Wicky
- * @since 2018-05-03
+ * @since 2018-06-02
  */
 public interface SetMealSalesService extends IService<SetMealSales> {
 

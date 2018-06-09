@@ -103,16 +103,18 @@
                   <div class="nav-header" data-toggle="collapse" data-target="#dashboard-menu"><i class="icon-dashboard"></i>类别</div>
                   <ul id="dashboard-menu" class="nav nav-list collapse in" th:each="type : ${types}">
                       <br>
-                      <font size=4>       <a th:href="@{/sevProject/SelectByType(typeid=${type.typeid})}"><li th:text="${type.typename}">neo&nb&nbsp&nbsp</li></a>  </font>
+                      <font size=4>       <a th:href="@{/sevProject/SelectByType(typeid=${type.typeid})}"><li th:text="${type.typename}">neo&nbsp&nbsp&nbsp&nbsp&nbsp</li></a>  </font>
 
 
                   </ul>
-                <div class="nav-header" data-toggle="collapse" data-target="#accounts-menu"><i class="icon-briefcase"></i>Account<span class="label label-info">+10</span></div>
-                <ul id="accounts-menu" class="nav nav-list collapse in">
-                    <li ><a th:href="@{/transaction/toPhone}">新的交易</a></li>
-                    <li ><a th:href="@{/transaction/toOrder}">查看订单</a></li>
-                  <li ><a href="reset-password.html">Reset Password</a></li>
-                </ul>
+                  <div class="nav-header" data-toggle="collapse" data-target="#accounts-menu"><i class="icon-briefcase"></i>Account<span class="label label-info">+10</span></div>
+                  <ul id="accounts-menu" class="nav nav-list collapse in">
+                      <li ><a th:href="@{/transaction/toPhone}">新的交易</a></li>
+                      <li ><a th:href="@{/transaction/toOrder}">查看订单</a></li>
+                      <!--<li ><a th:href="@{/customer/toSelect}">查看消费者</a></li>-->
+                      <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/customer/list}">查看所有消费者用户</a></li>
+                      <li ><a href="reset-password.html">Reset Password</a></li>
+                  </ul>
 
                 <div class="nav-header" data-toggle="collapse" data-target="#settings-menu"><i class="icon-exclamation-sign"></i>Error Pages</div>
                 <ul id="settings-menu" class="nav nav-list collapse in">
@@ -130,7 +132,7 @@
             </div>
           </div>
         <div class="span9">
-            <h1 class="page-title">添加类别</h1>
+            <h1 class="page-title">输入手机号</h1>
 <div class="btn-toolbar">
     <button class="btn btn-primary" onclick="return addPhone()"><i class="icon-save"></i> 确定手机号</button>
 
@@ -196,7 +198,7 @@
     //修改品种名
         function addPhone() {
         var form = document.forms[0];
-        form.action = "http://localhost:8080/transaction/start";
+        form.action = "http://localhost:8080/customer/SelectByPhone";
         form.method = "post";
         form.submit();
     }

@@ -32,6 +32,8 @@ public class SevSalesDetails extends Model<SevSalesDetails> {
     private Integer quantity;
     @TableField(exist = false)
     private Waiter waiter;
+    @TableField(exist = false)
+    private SevProject sevProject;
 
     public Integer getSalesId() {
         return salesId;
@@ -87,6 +89,15 @@ public class SevSalesDetails extends Model<SevSalesDetails> {
 
     public void setWaiter(Waiter waiter) {
         this.waiter = waiter;
+    }
+
+
+    public SevProject getSevProject() {
+        return sevProject;
+    }
+
+    public void setSevProject(SevProject sevProject) {
+        this.sevProject = sevProject;
     }
 
     @Override

@@ -3,13 +3,13 @@
 
   <head>
     <meta charset="utf-8">
-    <title>Twenty Four</title>
+    <title>Swenty Four</title>
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
 
-
+ 
     <link href="../static/lib/bootstrap/css/bootstrap.css"
           th:href="@{/lib/bootstrap/css/bootstrap.css}"
 		  
@@ -89,7 +89,7 @@
                     </li>
                     
                 </ul>
-                <a class="brand" href="index.html"><span class="first">My</span> <span class="second">Beauty</span></a>
+                <a class="brand" href="index.html"><span class="first">Your</span> <span class="second">Company</span></a>
             </div>
         </div>
     </div>
@@ -103,19 +103,18 @@
                   <div class="nav-header" data-toggle="collapse" data-target="#dashboard-menu"><i class="icon-dashboard"></i>类别</div>
                   <ul id="dashboard-menu" class="nav nav-list collapse in" th:each="type : ${types}">
                       <br>
-                      <font size=4>       <a th:href="@{/sevProject/SelectByType(typeid=${type.typeid})}"><li th:text="${type.typename}">neo&nb&nbsp&nbsp</li></a>  </font>
+                      <font size=4>       <a th:href="@{/sevProject/SelectByType(typeid=${type.typeid})}"><li th:text="${type.typename}">neo&nbsp&nbsp&nbsp&nbsp&nbsp</li></a>  </font>
 
 
                   </ul>
-
-                <div class="nav-header" data-toggle="collapse" data-target="#accounts-menu"><i class="icon-briefcase"></i>Account<span class="label label-info">+10</span></div>
-                <ul id="accounts-menu" class="nav nav-list collapse in">
-                    <li ><a th:href="@{/transaction/toPhone}">新的交易</a></li>
-                    <li ><a th:href="@{/transaction/toOrder}">查看订单</a></li>
-                    <!--<li ><a th:href="@{/customer/toSelect}">查看消费者</a></li>-->
-                    <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/customer/list}">查看所有消费者用户</a></li>
-                    <li ><a href="reset-password.html">Reset Password</a></li>
-                </ul>
+                  <div class="nav-header" data-toggle="collapse" data-target="#accounts-menu"><i class="icon-briefcase"></i>Account<span class="label label-info">+10</span></div>
+                  <ul id="accounts-menu" class="nav nav-list collapse in">
+                      <li ><a th:href="@{/transaction/toPhone}">新的交易</a></li>
+                      <li ><a th:href="@{/transaction/toOrder}">查看订单</a></li>
+                      <!--<li ><a th:href="@{/customer/toSelect}">查看消费者</a></li>-->
+                      <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/customer/list}">查看所有消费者用户</a></li>
+                      <li ><a href="reset-password.html">Reset Password</a></li>
+                  </ul>
 
                 <div class="nav-header" data-toggle="collapse" data-target="#settings-menu"><i class="icon-exclamation-sign"></i>Error Pages</div>
                 <ul id="settings-menu" class="nav nav-list collapse in">
@@ -131,40 +130,25 @@
                   <li ><a href="terms-and-conditions.html">Terms and Conditions</a></li>
                 </ul>
             </div>
-        </div>
+          </div>
         <div class="span9">
-            <h1 class="page-title">修改类别</h1>
+            <h1 class="page-title">输入手机号</h1>
 <div class="btn-toolbar">
-    <button class="btn btn-primary" onclick="return addType()"><i class="icon-save"></i>保存</button>
+    <button class="btn btn-primary" onclick="return addPhone()"><i class="icon-save"></i> 确定</button>
 
   
   <div class="btn-group">
   </div>
 </div>
 <div class="well">
-    <!--<ul class="nav nav-tabs">-->
-      <!--&lt;!&ndash;<li class="active"><a href="#home" data-toggle="tab">Profile</a></li>&ndash;&gt;-->
-      <!--&lt;!&ndash;<li><a href="#profile" data-toggle="tab">Password</a></li>&ndash;&gt;-->
-    <!--</ul>-->
     <div id="myTabContent" class="tab-content">
       <div class="tab-pane active in" id="home">
     <form id="tab">
-	   <input type="hidden" name="typeid" th:value="${typeid}" /> 
-        <label>类别名</label>
-        <input type="text" class="input-xlarge" name="typename"/>
- 
-       
+        <label>手机号</label>
+        <input type="text" class="input-xlarge" name="phone"/>
     </form>
       </div>
-      <div class="tab-pane fade" id="profile">
-    <form id="tab2">
-        <label>New Password</label>
-        <input type="password" class="input-xlarge">
-        <div>
-            <button class="btn btn-primary">Update</button>
-        </div>
-    </form>
-      </div>
+      
   </div>
 
 </div>
@@ -176,7 +160,7 @@
   </div>
   <div class="modal-body">
     
-    <p class="error-text"><i class="icon-warning-sign modal-icon"></i>你确定删除该类别吗?</p>
+    <p class="error-text"><i class="icon-warning-sign modal-icon"></i>你确定删除该类别吗？</p>
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
@@ -190,6 +174,7 @@
 
     
     <footer>
+        <hr>
 
     </footer>
     
@@ -199,28 +184,19 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-
-      
+     
     <script href="../static/lib/bootstrap/js/bootstrap.js"
             th:href="@{/lib/bootstrap/js/bootstrap.js}"></script>
     
     <script type="text/javascript">
-    //修改品种名
-    function addType() {
+        function addPhone() {
         var form = document.forms[0];
-        form.action = "http://localhost:8080/type/edit";
+        form.action = "http://localhost:8080/customer/SelectByPhone";
         form.method = "post";
         form.submit();
     }
 </script>
-    
-    
-    
-    
-    
-    
-    
-    
+
 
 </div></div>
   </body>

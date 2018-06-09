@@ -77,15 +77,6 @@
                 <i class="icon-user" th:text="${user.username}"></i>
                 <button class="btn btn-primary"><i class="icon-off"></i> <a th:href="@{/logout}"> 注销</a></button>
                 <b class="caret"></b></a>
-                <!--<i class="icon-caret-down"></i>-->
-                <!--</a>-->
-
-                <!--<ul class="dropdown-menu">-->
-                <!--<li><a tabindex="-1" href="#">Settings</a></li>-->
-                <!--&lt;!&ndash;<li class="divider"></li>&ndash;&gt;-->
-                <!--<li><a tabindex="-1" href="@{/login/logout}">注销</a></li>-->
-                <!--</ul>-->
-                <!--</li>-->
 
             </ul>
             <a class="brand" href="index.html"><span class="first">My</span> <span class="second">Beauty</span></a>
@@ -99,10 +90,10 @@
     <div class="row-fluid">
         <div class="span3">
             <div class="sidebar-nav">
-                <div class="nav-header" data-toggle="collapse" data-target="#dashboard-menu"><i class="icon-dashboard"></i>类别</div>
+                <div class="nav-header" data-toggle="collapse" data-target="#dashboard-menu"><i class="icon-dashboard"></i>服务项目</div>
                 <ul id="dashboard-menu" class="nav nav-list collapse in" th:each="type : ${types}">
                     <br>
-                    <font size=4>       <a th:href="@{/sevProject/SelectByType(typeid=${type.typeid})}"><li th:text="${type.typename}">neo&nb&nbsp&nbsp</li></a>  </font>
+                    <font size=4>       <a th:href="@{/sevProject/SelectByType(typeid=${type.typeid})}"><li th:text="${type.typename}">neo&nbsp&nbsp&nbsp&nbsp&nbsp</li></a>  </font>
 
 
                 </ul>
@@ -131,73 +122,60 @@
             </div>
         </div>
         <div class="span9">
-            <h1 class="page-title">类别</h1>
-            <div class="btn-toolbar">
-                <!--<div sec:authorize="hasRole('ROLE_ADMIN')"></div>-->
-                <div sec:authorize="hasRole('ROLE_ADMIN')" >
-                    <button class="btn btn-primary"><i class="icon-adjust"></i>  <a th:href="@{/type/list}">管理</a></button>
-                    <button class="btn btn-primary"><i class="icon-plus"></i> <a th:href="@{/type/toAdd}"> 添加</a></button>
-                </div>
-                <!--<button class="btn">Import</button>-->
-                <!--<button class="btn">Export</button>-->
+        <div class="well">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>套餐名</th>
+                    <th>套餐价格</th>
+                    <th>详细信息</th>
+                    <th>操作</th>
 
-                <div class="btn-group">
-                </div>
-            </div>
-            <div class="well">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>类别名</th>
+                    <th style="width: 26px;"></th>
+                    <th style="width: 26px;"></th>
+                </tr>
+                </thead>
+                <tbody>
 
-                        <th style="width: 26px;"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    <tr  th:each="type : ${types}">
-
-                        <td th:text="${type.typeid}">neo</td>
-                        <td th:text="${type.typename}">neo</td>
-                        <td>
-                            <a  sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/type/toEdit(typeid=${type.typeid})}"><i class="icon-pencil"></i></a>
-                            <a  sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/type/delete(typeid=${type.typeid})}" onClick=M() ><i class="icon-remove"></i></a>
-
-                        </td>
+                <tr  th:each="setMeal : ${session.setMeals}">
 
 
-                    </tr>
+                    <td th:text="${setMeal.setMealName}">neo</td>
+                    <td th:text="${setMeal.setMealPrice}">neo</td>
+                    <td> <button> <a th:href="@{/setMealDetail/list(setMealId=${setMeal.setMealId})}">查看详情</a></button></td>
+                    <td> <button><a  th:href="@{/setMealSales/add(setMealId=${setMeal.setMealId})}">购买</a></button></td>
 
 
-                    </tbody>
-                </table>
-            </div>
-            <div class="pagination">
-                <ul>
-                    <li><a href="#">Prev</a></li>
-                    <li><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">Next</a></li>
-                </ul>
-            </div>
+                </tr>
 
 
+                </tbody>
+            </table>
 
-
+        </div>
+        <div class="pagination">
+            <ul>
+                <li><a href="#">Prev</a></li>
+                <li><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">Next</a></li>
+            </ul>
         </div>
 
 
 
-        <footer>
-
-        </footer>
-
-
-
     </div>
+
+
+
+
+    <footer>
+
+    </footer>
+
+
 </div>
 
 <!-- Le javascript
@@ -207,20 +185,9 @@
 
 
 <script href="../static/lib/bootstrap/js/bootstrap.js"
-        th:href="@{/lib/bootstrap/js/bootstrap.js}"></script>
-
-
-
-
-
-
-<script type="text/javascript">
-    function M( ){
-        var Mybool=confirm("确定删除？");
-        if(!Mybool)
-            window.event.returnValue=false
-    }
+        th:href="@{/lib/bootstrap/js/bootstrap.js}">
 </script>
+
 
 
 

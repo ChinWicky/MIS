@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author Wicky
- * @since 2018-05-03
+ * @since 2018-06-02
  */
 @Service
 public class SetMealSalesServiceImap extends ServiceImpl<SetMealSalesDao, SetMealSales> implements SetMealSalesService {

@@ -17,7 +17,36 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        customer_id AS customerId, name, phone, birth, customer_role_id AS customerRoleId, history_total_price AS historyTotalPrice
+        a.customer_id AS customerId,
+        a.customer_role_id AS customerRoleId,
+        a.history_total_price AS historyTotalPrice,
+        a.customer_id,
+        a.name,
+        a.phone,
+        a.birth,
+        a.customer_role_id,
+        a.history_total_price,
+        customer_role.customer_role_name AS "customerRole.customerRoleName"
     </sql>
+
+    <sql id="reservationJoins">
+        LEFT JOIN customer_role ON customer_role.customer_role_id = a.customer_role_id
+    </sql>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM customer a
+        <include refid="reservationJoins"/>
+    </select>
+
+    <select id="findPhone" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM customer a
+        <include refid="reservationJoins"/>
+        WHERE a.phones = #{phone}
+    </select>
+
 
 </mapper>

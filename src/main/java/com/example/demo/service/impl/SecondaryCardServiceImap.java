@@ -4,7 +4,10 @@ import com.example.demo.entity.SecondaryCard;
 import com.example.demo.mapper.SecondaryCardDao;
 import com.example.demo.service.SecondaryCardService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,4 +20,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class SecondaryCardServiceImap extends ServiceImpl<SecondaryCardDao, SecondaryCard> implements SecondaryCardService {
 
+    @Autowired
+    SecondaryCardDao secondaryCardDao ;
+    @Override
+    public List<SecondaryCard> findSecondaryCardById(int id) {
+        return secondaryCardDao.findId(id);
+    }
 }

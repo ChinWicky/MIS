@@ -14,7 +14,26 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        set_meal_id AS setMealId, pro_id AS proId, total_count AS totalCount
+        a.set_meal_id AS setMealId,
+        a.pro_id AS proId,
+        a.total_count AS totalCount,
+        a.set_meal_id,
+        a.pro_id,
+        a.total_count,
+        set_meal.set_meal_name AS "setMeal.setMealName",
+        sev_project.pro_name AS "sevProject.proName"
     </sql>
 
+    <sql id="reservationJoins">
+        LEFT JOIN set_meal ON set_meal.set_meal_id = a.set_meal_id
+        LEFT JOIN sev_project ON sev_project.pro_id = a.pro_id
+    </sql>
+
+    <select id="findSetMeal" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM set_meal_sales_detail a
+        <include refid="reservationJoins"/>
+        WHERE a.set_meal_id = #{id}
+    </select>
 </mapper>

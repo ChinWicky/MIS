@@ -213,6 +213,8 @@
                 <ul id="accounts-menu" class="nav nav-list collapse in">
                     <li ><a th:href="@{/transaction/toPhone}">新的交易</a></li>
                     <li ><a th:href="@{/transaction/toOrder}">查看订单</a></li>
+                    <!--<li ><a th:href="@{/customer/toSelect}">查看消费者</a></li>-->
+                    <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/customer/list}">查看所有消费者用户</a></li>
                     <li ><a href="reset-password.html">Reset Password</a></li>
                 </ul>
 

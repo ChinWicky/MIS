@@ -10,11 +10,12 @@
         <id column="set_meal_sale_id" property="setMealSaleId" />
         <result column="customer_id" property="customerId" />
         <result column="set_meal_id" property="setMealId" />
+        <result column="set_meal_sales_time" property="setMealSalesTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        set_meal_sale_id AS setMealSaleId, customer_id AS customerId, set_meal_id AS setMealId
+        set_meal_sale_id AS setMealSaleId, customer_id AS customerId, set_meal_id AS setMealId, set_meal_sales_time AS setMealSalesTime
     </sql>
 
 </mapper>

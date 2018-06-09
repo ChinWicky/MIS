@@ -28,6 +28,18 @@ public class Customer extends Model<Customer> {
     private Integer customerRoleId;
     @TableField("history_total_price")
     private Double historyTotalPrice;
+    @TableField(exist = false)
+    private CustomerRole customerRole;
+
+    public CustomerRole getCustomerRole() {
+        return customerRole;
+    }
+
+    public void setCustomerRole(CustomerRole customerRole) {
+        this.customerRole = customerRole;
+    }
+
+
 
 
     public Integer getCustomerId() {

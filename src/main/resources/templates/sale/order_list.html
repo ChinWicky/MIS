@@ -105,7 +105,7 @@
                 <div class="nav-header" data-toggle="collapse" data-target="#dashboard-menu"><i class="icon-dashboard"></i>类别</div>
                 <ul id="dashboard-menu" class="nav nav-list collapse in" th:each="type : ${types}">
                     <br>
-                    <font size=4>       <a th:href="@{/sevProject/SelectByType(typeid=${type.typeid})}"><li th:text="${type.typename}">neo&nb&nbsp&nbsp</li></a>  </font>
+                    <font size=4>       <a th:href="@{/sevProject/SelectByType(typeid=${type.typeid})}"><li th:text="${type.typename}">neo&nbsp&nbsp&nbsp&nbsp&nbsp</li></a>  </font>
 
 
                 </ul>
@@ -113,6 +113,8 @@
                 <ul id="accounts-menu" class="nav nav-list collapse in">
                     <li ><a th:href="@{/transaction/toPhone}">新的交易</a></li>
                     <li ><a th:href="@{/transaction/toOrder}">查看订单</a></li>
+                    <!--<li ><a th:href="@{/customer/toSelect}">查看消费者</a></li>-->
+                    <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/customer/list}">查看所有消费者用户</a></li>
                     <li ><a href="reset-password.html">Reset Password</a></li>
                 </ul>
 
@@ -152,8 +154,7 @@
                             <th>总价</th>
                             <th>状态</th>
                             <th>操作</th>
-                            <th>支付时间</th>
-                            <th>支付金额</th>
+
                             <th style="width: 26px;"></th>
                         </tr>
                         </thead>
@@ -168,6 +169,7 @@
                         <td>
                         <a th:href="@{/transaction/pay(orderId=${sev_sales.salesId})}"><button type="button" >支付</button></a>
                         <a th:href="@{/transaction/deleteOrder(orderId=${sev_sales.salesId})}"><button type="button">删除</button></a>
+                        <a th:href="@{/transaction/showOrderDetail(orderId=${sev_sales.salesId})}"><button type="button">订单明细</button></a>
                         </td>
                         <!--<td th:text="${tsev_sales.*}">neo</td>-->
                         <!--<td th:text="${tsev_sales.*}">neo</td>-->
@@ -223,58 +225,6 @@
             </div>
 
         </div>
-
-
-            <!--<div class="well">-->
-                <!--<table class="table">-->
-                    <!--<thead>-->
-                    <!--<tr>-->
-                        <!--<th>订单号</th>-->
-                        <!--<th>订单时间</th>-->
-                        <!--<th>总价</th>-->
-                        <!--<th>状态</th>-->
-                        <!--<th>操作</th>-->
-                        <!--<th>支付时间</th>-->
-                        <!--<th>支付金额</th>-->
-
-
-
-                        <!--<th style="width: 26px;"></th>-->
-                    <!--</tr>-->
-                    <!--</thead>-->
-                    <!--<tbody>-->
-
-                    <!--<tr  th:each="sev_sales:${session.sevSales}">-->
-
-                        <!--<td th:text="${sev_sales.salesId}">neo</td>-->
-                        <!--<td th:text="${sev_sales.salesTime}">neo</td>-->
-                        <!--<td th:text="${sev_sales.totalPrice}">neo</td>-->
-                        <!--<td th:text="${sev_sales.state}">neo</td>-->
-                        <!--<td>-->
-                            <!--&lt;!&ndash;<a  sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/type/toEdit(typeid=${type.typeid})}"><i class="icon-pencil"></i></a>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<a  sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/type/delete(sales_id=${sev_sales.sales_id})}" onClick=M() ><i class="icon-remove"></i></a>&ndash;&gt;-->
-                                    <!--<a th:href="@{/transaction/pay(orderId=${sev_sales.salesId})}"><button type="button" >支付</button></a>-->
-                                    <!--<a th:href="@{/transaction/deleteOrder(orderId=${sev_sales.salesId})}"><button type="button">删除</button></a>-->
-                        <!--</td>-->
-                        <!--&lt;!&ndash;<td th:text="${tsev_sales.*}">neo</td>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<td th:text="${tsev_sales.*}">neo</td>&ndash;&gt;-->
-                    <!--</tr>-->
-
-
-                    <!--</tbody>-->
-                <!--</table>-->
-            <!--</div>-->
-            <!--<div class="pagination">-->
-                <!--<ul>-->
-                    <!--<li><a href="#">Prev</a></li>-->
-                    <!--<li><a href="#">1</a></li>-->
-                    <!--<li><a href="#">2</a></li>-->
-                    <!--<li><a href="#">3</a></li>-->
-                    <!--<li><a href="#">4</a></li>-->
-                    <!--<li><a href="#">Next</a></li>-->
-                <!--</ul>-->
-            <!--</div>-->
-        <!--</div>-->
 
 
 

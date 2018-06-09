@@ -12,8 +12,8 @@ public class Application {
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        gc.setOutputDir("D:\\IDEA\\demo1\\src\\main\\java");
-        gc.setFileOverride(false);
+        gc.setOutputDir("D:\\IDEA\\temporary");
+        gc.setFileOverride(true);
         gc.setActiveRecord(true);
         gc.setEnableCache(true);// XML 二级缓存
         gc.setBaseResultMap(true);// XML ResultMap

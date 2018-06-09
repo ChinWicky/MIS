@@ -8,7 +8,6 @@ import com.example.demo.entity.Type;
 import com.example.demo.model.Cart;
 import com.example.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -68,7 +67,7 @@ public class PayController {
         model= this.returnAllType(model);
         //显示所有服务
         model= this.returnAllSevPro(model);
-        return "sale/sev_sales_list";
+        return "sale/order_list";
     }
 
     public Model returnAllType(Model model){

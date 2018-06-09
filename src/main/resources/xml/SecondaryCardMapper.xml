@@ -14,7 +14,24 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        secondary_card_id AS secondaryCardId, pro_id AS proId, count
+        a.secondary_card_id AS secondaryCardId,
+        a.pro_id AS proId,
+        a.secondary_card_id,
+        a.pro_id,
+        count,
+        sev_project.pro_name AS "sevProject.proName"
     </sql>
+
+    <sql id="reservationJoins">
+        LEFT JOIN sev_project ON sev_project.pro_id = a.pro_id
+    </sql>
+
+    <select id="findId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM secondary_card a
+        <include refid="reservationJoins"/>
+        WHERE a.secondary_card_id = #{id}
+    </select>
 
 </mapper>

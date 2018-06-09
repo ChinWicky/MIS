@@ -24,7 +24,16 @@ public class SecondaryCard extends Model<SecondaryCard> {
     @TableField("pro_id")
     private Integer proId;
     private Integer count;
+    @TableField(exist = false)
+    private SevProject sevProject;
 
+    public SevProject getSevProject() {
+        return sevProject;
+    }
+
+    public void setSevProject(SevProject sevProject) {
+        this.sevProject = sevProject;
+    }
 
     public Integer getSecondaryCardId() {
         return secondaryCardId;
