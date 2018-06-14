@@ -35,6 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/type/add").hasRole("ADMIN")
                 .antMatchers("/sevProject/delete").hasRole("ADMIN")
                 .antMatchers("/sevProject/add").hasRole("ADMIN")
+                .antMatchers("/sevProject/toAdd").hasRole("ADMIN")
                 .antMatchers("/type/edit").hasRole("ADMIN")
                 .antMatchers("/sevProject/edit").hasRole("ADMIN")
                 //.antMatchers("/db/**").access("hasRole('ROLE_ADMIN')")
