@@ -11,9 +11,9 @@ import java.util.List;
  * </p>
  *
  * @author Wicky
- * @since 2018-05-03
+ * @since 2018-05-15
  */
 public interface SecondaryCardDao extends BaseMapper<SecondaryCard> {
-
     List<SecondaryCard> findId(int id);
+    int updateCount(SecondaryCard secondaryCard);
 }

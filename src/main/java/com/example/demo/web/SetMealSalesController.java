@@ -35,12 +35,16 @@ public class SetMealSalesController {
     private SecondaryCardService secondaryCardService;
     @Autowired
     private SetMealService setMealService;
+    @Autowired
+    private TypeService typeService;
+    @Autowired
+    private SevProjectService sevProjectService;
 
     @RequestMapping("/add")
     public String addSetMeal(Model model,int setMealId){
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-       HttpSession session=request.getSession();
-       Customer customer=(Customer)session.getAttribute("customer");
+        HttpSession session=request.getSession();
+        Customer customer=(Customer)session.getAttribute("customer");
         Date time=new Date();
         SetMealSales setMealSales=new SetMealSales();
         setMealSales.setCustomerId(customer.getCustomerId());
@@ -50,13 +54,13 @@ public class SetMealSalesController {
 
 
         //更新历史消费总价
-        SetMeal  setMeal= setMealService.selectById(setMealSales.getSetMealId());
+       // SetMeal  setMeal= setMealService.selectById(setMealSales.getSetMealId());
         double price=customer.getHistoryTotalPrice()+setMealService.selectById(setMealSales.getSetMealId()).getSetMealPrice();
         customer.setHistoryTotalPrice(price);
 
 
         //更新会员等级
-        if(customer.getHistoryTotalPrice()>2500)
+        if(customer.getHistoryTotalPrice()>=2500&&customer.getCustomerRoleId()==2)
             customer.setCustomerRoleId(3);//高级会员
         this.customerService.updateById(customer);
 
@@ -98,7 +102,7 @@ public class SetMealSalesController {
                 secondaryCard1 = secondaryCards.get(queck);
                 secondaryCard1.setCount(secondaryCard1.getCount() + setMealDetail.getTotalCount());
                 secondaryCard1.setProId(secondaryCard1.getProId());
-                secondaryCardService.updateById(secondaryCard1);
+                secondaryCardService.updateCount(secondaryCard1);
             }
         }
         //secondaryCards=secondaryCardService.selectByMap(map1);
@@ -111,10 +115,18 @@ public class SetMealSalesController {
         generalController.returnUser(model);
         //显示所有种类
 
+        returnAllType(model);
         return "customer/customer_info";
 
     }
 
+    public Model returnAllType(Model model){
+        Map map=new HashMap();
+        List<Type> types = typeService.selectByMap(map);
+        model.addAttribute("types",types);
+        return model;
+
+    }
 
 }
 

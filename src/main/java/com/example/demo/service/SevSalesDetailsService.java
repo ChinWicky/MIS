@@ -4,6 +4,7 @@ import com.example.demo.entity.SevSalesDetails;
 import com.baomidou.mybatisplus.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -17,4 +18,5 @@ public interface SevSalesDetailsService extends IService<SevSalesDetails> {
     List<SevSalesDetails> findWaiter(Integer id);
     List<SevSalesDetails> findSalesId(Integer id);
     List<SevSalesDetails> findAll();
+    Map getChart();
 }

@@ -9,9 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -115,6 +117,29 @@ public class OrderController extends GlobalMethodSecurityConfiguration {
 
     }
 
+    @RequestMapping("/toChart")
+    @ResponseBody
+    public Map toChart(HttpSession session,Model model){
+        Map map = new HashMap();
+        List<SevSalesDetails> sevSales = sevSalesDetailsService.findAll();
+        map = sevSalesDetailsService.getChart();
+        //List<SevSales> sevSales = sevSalesService.selectByMap(map);
+        return map ;
+    }
+
+    @RequestMapping("/Chart")
+    public String getChart(HttpSession session,Model model){
+
+        GeneralController generalController=new GeneralController();
+        //得到用户
+        model=generalController.returnUser(model);
+        //显示所有种类
+        model= this.returnAllType(model);
+        //显示所有服务
+        model= this.returnAllSevPro(model);
+        return "chart/highChart" ;
+    }
+
 
     @RequestMapping("/addToCart")
     public String addToCart(HttpSession session,SevSalesDetails sevSalesDetails,Model model,int waiterId){
@@ -183,13 +208,18 @@ public class OrderController extends GlobalMethodSecurityConfiguration {
     @RequestMapping("/pay")
     public String pay(HttpServletRequest request, HttpSession session, Model model) {
         Cart cart = new Cart(sevProjectService,secondaryCardDetailsService,sevSalesDetailsService,customerService);
+        Customer customer=(Customer)session.getAttribute("customer");
         int sevSalesId;
          sevSalesId = Integer.parseInt(request.getParameter("orderId"));
          SevSales sevSales= sevSalesService.selectById(sevSalesId);
       try {
             cart.setPay(sevSales);//更新次卡次数，用户消费总价
             sevSales.setState("已支付");
-
+          if(customer.getHistoryTotalPrice()>=2500&&customer.getCustomerRoleId()==2)
+          {
+              customer.setCustomerRoleId(3);//高级会员
+              this.customerService.updateById(customer);
+          }
             Pay pay=new Pay();
             pay.setPaymentTime(new Date());
             pay.setSalesId(sevSales.getSalesId());
@@ -218,8 +248,17 @@ public class OrderController extends GlobalMethodSecurityConfiguration {
         Customer customer = (Customer)session.getAttribute("customer");
         Date time=new Date();
         SevSales sevSales = new SevSales();
-        if(cart==null)
+        if(cart==null){
+            GeneralController generalController=new GeneralController();
+            //得到用户
+            model=generalController.returnUser(model);
+            //显示所有种类
+            model= this.returnAllType(model);
+            //显示所有服务
+            model= this.returnAllSevPro(model);
             return "sale/order_list";
+        }
+
        try {
             sevSales.setCustomerId(customer.getCustomerId());
             sevSales.setTotalPrice(cart.getPaymentPrice());
@@ -228,6 +267,7 @@ public class OrderController extends GlobalMethodSecurityConfiguration {
             sevSalesService.insert(sevSales);
             cart.setItem(sevSales);//将消费明细持久到数据库
             session.setAttribute("sevSales",sevSalesService.selectByMap(new HashMap()));
+            session.removeAttribute("cart");
        }catch(Exception e){
            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
            System.out.println("添加订单失败");

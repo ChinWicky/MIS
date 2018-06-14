@@ -3,12 +3,12 @@
 <mapper namespace="com.example.demo.mapper.SecondaryCardDao">
 
     <!-- 开启二级缓存 -->
-    <!--<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>-->
+    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.demo.entity.SecondaryCard">
-        <id column="secondary_card_id" property="secondaryCardId" />
-        <result column="pro_id" property="proId" />
+        <id column="pro_id" property="proId" />
+        <result column="secondary_card_id" property="secondaryCardId" />
         <result column="count" property="count" />
     </resultMap>
 
@@ -34,4 +34,10 @@
         WHERE a.secondary_card_id = #{id}
     </select>
 
+    <update id="updateCount" >
+        UPDATE
+        secondary_card
+        SET count = #{count}
+        WHERE secondary_card_id = #{secondaryCardId} AND pro_id = #{proId}
+    </update>
 </mapper>

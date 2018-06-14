@@ -11,9 +11,9 @@ import java.util.List;
  * </p>
  *
  * @author Wicky
- * @since 2018-05-03
+ * @since 2018-05-15
  */
 public interface SecondaryCardService extends IService<SecondaryCard> {
-
     List<SecondaryCard> findSecondaryCardById(int id);
+    void updateCount(SecondaryCard secondaryCard);
 }

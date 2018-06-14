@@ -12,17 +12,17 @@ import java.io.Serializable;
  * </p>
  *
  * @author Wicky
- * @since 2018-05-03
+ * @since 2018-05-15
  */
 @TableName("secondary_card")
 public class SecondaryCard extends Model<SecondaryCard> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId("secondary_card_id")
-    private Integer secondaryCardId;
-    @TableField("pro_id")
+    @TableId("pro_id")
     private Integer proId;
+    @TableField("secondary_card_id")
+    private Integer secondaryCardId;
     private Integer count;
     @TableField(exist = false)
     private SevProject sevProject;
@@ -35,13 +35,6 @@ public class SecondaryCard extends Model<SecondaryCard> {
         this.sevProject = sevProject;
     }
 
-    public Integer getSecondaryCardId() {
-        return secondaryCardId;
-    }
-
-    public void setSecondaryCardId(Integer secondaryCardId) {
-        this.secondaryCardId = secondaryCardId;
-    }
 
     public Integer getProId() {
         return proId;
@@ -49,6 +42,14 @@ public class SecondaryCard extends Model<SecondaryCard> {
 
     public void setProId(Integer proId) {
         this.proId = proId;
+    }
+
+    public Integer getSecondaryCardId() {
+        return secondaryCardId;
+    }
+
+    public void setSecondaryCardId(Integer secondaryCardId) {
+        this.secondaryCardId = secondaryCardId;
     }
 
     public Integer getCount() {
@@ -61,14 +62,14 @@ public class SecondaryCard extends Model<SecondaryCard> {
 
     @Override
     protected Serializable pkVal() {
-        return this.secondaryCardId;
+        return this.proId;
     }
 
     @Override
     public String toString() {
         return "SecondaryCard{" +
-        "secondaryCardId=" + secondaryCardId +
-        ", proId=" + proId +
+        "proId=" + proId +
+        ", secondaryCardId=" + secondaryCardId +
         ", count=" + count +
         "}";
     }

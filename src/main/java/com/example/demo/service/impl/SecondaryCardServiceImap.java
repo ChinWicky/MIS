@@ -15,15 +15,19 @@ import java.util.List;
  * </p>
  *
  * @author Wicky
- * @since 2018-05-03
+ * @since 2018-05-15
  */
 @Service
 public class SecondaryCardServiceImap extends ServiceImpl<SecondaryCardDao, SecondaryCard> implements SecondaryCardService {
-
     @Autowired
     SecondaryCardDao secondaryCardDao ;
     @Override
     public List<SecondaryCard> findSecondaryCardById(int id) {
         return secondaryCardDao.findId(id);
+    }
+
+    @Override
+    public void updateCount(SecondaryCard secondaryCard) {
+         secondaryCardDao.updateCount(secondaryCard);
     }
 }

@@ -218,7 +218,10 @@ public class Cart {
 				//计算总价
 				totalPrice = item.getQuantity() * item.getPostDiscountPrice() + totalPrice;
 			}
-
+		if(customer.getHistoryTotalPrice()>=2500&&customer.getCustomerRoleId()==2)
+		{
+			customer.setCustomerRoleId(3);//高级会员
+		}
 		customer.setHistoryTotalPrice(customer.getHistoryTotalPrice() +  totalPrice);
 //		System.out.println("更新用户价格"+(customer.getHistoryTotalPrice() + totalPrice));
 //		System.out.println("客户Id"+customer.getCustomerId());
