@@ -213,18 +213,17 @@ public class Cart {
 					map1.put("pro_id", item.getProId());
 				    secondaryCard = (SecondaryCard) secondaryCardDetailsService.selectByMap(map1).get(0);
 				    secondaryCard.setCount(secondaryCard.getCount() - item.getQuantity());
-				    secondaryCardDetailsService.updateAllColumnById(secondaryCard);
+				    secondaryCardDetailsService.updateCount(secondaryCard);
 				}
 				//计算总价
 				totalPrice = item.getQuantity() * item.getPostDiscountPrice() + totalPrice;
 			}
+
+		customer.setHistoryTotalPrice(customer.getHistoryTotalPrice() +  totalPrice);
 		if(customer.getHistoryTotalPrice()>=2500&&customer.getCustomerRoleId()==2)
 		{
 			customer.setCustomerRoleId(3);//高级会员
 		}
-		customer.setHistoryTotalPrice(customer.getHistoryTotalPrice() +  totalPrice);
-//		System.out.println("更新用户价格"+(customer.getHistoryTotalPrice() + totalPrice));
-//		System.out.println("客户Id"+customer.getCustomerId());
 		customerService.updateById(customer);
 	}
 

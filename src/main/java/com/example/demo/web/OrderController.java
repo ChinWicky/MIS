@@ -215,11 +215,6 @@ public class OrderController extends GlobalMethodSecurityConfiguration {
       try {
             cart.setPay(sevSales);//更新次卡次数，用户消费总价
             sevSales.setState("已支付");
-          if(customer.getHistoryTotalPrice()>=2500&&customer.getCustomerRoleId()==2)
-          {
-              customer.setCustomerRoleId(3);//高级会员
-              this.customerService.updateById(customer);
-          }
             Pay pay=new Pay();
             pay.setPaymentTime(new Date());
             pay.setSalesId(sevSales.getSalesId());
